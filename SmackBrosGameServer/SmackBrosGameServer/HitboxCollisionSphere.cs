@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace SmackBrosGameServer
 {
@@ -34,11 +33,11 @@ namespace SmackBrosGameServer
         }
         public void Update()
         {
-            centre += transformations[curFrame];
-            for(int i = 0; i < 4; i++)
-            {
-                POI[i] += transformations[curFrame];
-            }
+            //centre += transformations[curFrame];
+            //for(int i = 0; i < 4; i++)
+            //{
+               // POI[i] += transformations[curFrame];
+            //}
             curFrame++;
         }
     }

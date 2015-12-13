@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmackBrosGameServer", "SmackBrosGameServer\SmackBrosGameServer\SmackBrosGameServer.csproj", "{5A4F474C-088D-41FC-8EDD-A4C39E8F64CF}"
-EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "SmackBrosGameServerContent", "SmackBrosGameServer\SmackBrosGameServerContent\SmackBrosGameServerContent.contentproj", "{7D8D047F-1F6B-49DF-9EA8-F1E34247E01C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmackBrosGameServer", "SmackBrosGameServer\SmackBrosGameServer.csproj", "{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,12 +11,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A4F474C-088D-41FC-8EDD-A4C39E8F64CF}.Debug|x86.ActiveCfg = Debug|x86
-		{5A4F474C-088D-41FC-8EDD-A4C39E8F64CF}.Debug|x86.Build.0 = Debug|x86
-		{5A4F474C-088D-41FC-8EDD-A4C39E8F64CF}.Release|x86.ActiveCfg = Release|x86
-		{5A4F474C-088D-41FC-8EDD-A4C39E8F64CF}.Release|x86.Build.0 = Release|x86
-		{7D8D047F-1F6B-49DF-9EA8-F1E34247E01C}.Debug|x86.ActiveCfg = Debug|x86
-		{7D8D047F-1F6B-49DF-9EA8-F1E34247E01C}.Release|x86.ActiveCfg = Release|x86
+		{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}.Debug|x86.ActiveCfg = Debug|x86
+		{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}.Debug|x86.Build.0 = Debug|x86
+		{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}.Release|x86.ActiveCfg = Release|x86
+		{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
