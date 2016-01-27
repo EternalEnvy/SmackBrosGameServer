@@ -19,6 +19,18 @@ namespace SmackBrosGameServer
             Packet packet = null;
             switch (packetType)
             {
+                case 1:
+                    packet = new QueueInteractionPacket();
+                    packet.ReadPacketData(stream);
+                    return packet;
+                case 2:
+                    packet = new QueueStatusUpdatePacket();
+                    packet.ReadPacketData(stream);
+                    return packet;
+                case 3:
+                    packet = new QueueFinishedPacket();
+                    packet.ReadPacketData(stream);
+                    return packet;
                 case 4:
                     packet = new GameServerConnectPacket();
                     packet.ReadPacketData(stream);
@@ -30,7 +42,6 @@ namespace SmackBrosGameServer
                     packet = new InputPacket();
                     packet.ReadPacketData(stream);
                     return packet;
-
                 default:
                     throw new Exception("Unrecognized Packet Type");
             }
@@ -110,7 +121,7 @@ namespace SmackBrosGameServer
             stream.AddRange(bytes);
         }
 
-        protected long ReadShort(Stream stream)
+        protected short ReadShort(Stream stream)
         {
             var bytes = new byte[2];
             stream.Read(bytes, 0, 2);

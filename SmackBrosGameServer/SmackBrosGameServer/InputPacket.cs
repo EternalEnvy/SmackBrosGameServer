@@ -10,8 +10,8 @@ namespace SmackBrosGameServer
     class InputPacket : Packet
     {
         public long FrameNumber;
+        public int playerNum;
         public int Up;
-        public int Back;
         public int Left;
         public int Down;
         public int Right;
@@ -19,6 +19,8 @@ namespace SmackBrosGameServer
         public int DownC;
         public int LeftC;
         public int RightC;
+        public int RightTrigger;
+        public int LeftTrigger;
         public bool A;
         public bool B;
         public bool X;
@@ -31,7 +33,6 @@ namespace SmackBrosGameServer
         {
             typeID = 8;
         }
-
         public override void WritePacketData(List<byte> stream)
         {
             WriteLong(stream, FrameNumber);
@@ -39,6 +40,8 @@ namespace SmackBrosGameServer
             WriteInt(stream, Up + Down);
             WriteInt(stream, LeftC + RightC);
             WriteInt(stream, UpC + DownC);
+            WriteInt(stream, RightTrigger);
+            WriteInt(stream, LeftTrigger);
             var mask = (byte)((A ? 1 << 6 : 0) |
                               (B ? 1 << 5 : 0) |
                               (X ? 1 << 4 : 0) |
@@ -47,7 +50,6 @@ namespace SmackBrosGameServer
                               (LeftAnalog ? 1 << 1 : 0) |
                               (Start ? 1 : 0));
             stream.Add(mask);
-
         }
 
         public override void ReadPacketData(Stream stream)
@@ -97,6 +99,8 @@ namespace SmackBrosGameServer
                 UpC = cstickvert;
                 DownC = 0;
             }
+            RightTrigger = ReadInt(stream);
+            LeftTrigger = ReadInt(stream);
             var mask = stream.ReadByte();
             A = ((mask >> 6) & 1) == 1;
             B = ((mask >> 5) & 1) == 1;

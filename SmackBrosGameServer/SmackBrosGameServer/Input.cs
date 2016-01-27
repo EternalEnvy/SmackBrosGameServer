@@ -5,24 +5,24 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
-    struct Input
+    public struct Input
     {
-        int left;
-        int right;
-        int up;
-        int down;
-        int upC;
-        int downC;
-        int leftC;
-        int rightC;
-        int RightTrigger;
-        int LeftTrigger;
-        bool A;
-        bool B;
-        bool X;
-        bool Y;
-        bool RightAnalog;
-        bool LeftAnalog;
-        bool Start;
+        public int left;
+        public int right;
+        public int up;
+        public int down;
+        public int upC;
+        public int downC;
+        public int leftC;
+        public int rightC;
+        public int RightTrigger;
+        public int LeftTrigger;
+        public bool A;
+        public bool B;
+        public bool X;
+        public bool Y;
+        public bool RightAnalog;
+        public bool LeftAnalog;
+        public bool Start;
     }
 }

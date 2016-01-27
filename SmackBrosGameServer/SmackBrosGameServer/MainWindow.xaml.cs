@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.VisualBasic;
 using SharpGL.SceneGraph;
 using SharpGL;
 
@@ -18,10 +24,157 @@ namespace SmackBrosGameServer
 {
     public partial class MainWindow : Window
     {
-        bool DebugMode = true;
+        private bool DebugMode = true;
+        private bool GamePaused = false;
+        private double pauseAlpha;
+
+        public static DateTime? lastNetworkReceived = null;
+        static int port1 = 1521;
+        static int port2 = 1522;
+        static int port3 = 1523;
+
+        private int numSmackers;
+        private long? FrameNumber = null; 
+        bool? IsServer;
+        string ServerIP;
+        string ClientIP;
+        Thread ReceivingThread;
+        Thread ReceiveStatesThread;
+        UdpClient client;
+        UdpClient client2;
+        UdpClient client3;
+        readonly object packetProcessQueueLock = new object();
+        Queue<Packet> packetProcessQueue = new Queue<Packet>();
+
+        List<InputPacket> ClientInputBuffer = new List<InputPacket>();
+        readonly object ServerStateBufferLock = new object();
+        List<GameStatePacket> ServerStateBuffer = new List<GameStatePacket>();
+
+        List<Smacker> smackerList = new List<Smacker>();
+        List<Tuple<int, Input>> playerInputs = new List<Tuple<int, Input>>();
+
+        bool acceptingNewClients;
+        public bool serverInitialized = false;
+
         public MainWindow()
         {
             InitializeComponent();
+            acceptingNewClients = true;
+        }
+        private void Update(GameTime gameTime)
+        {
+            pauseAlpha += gameTime.ElapsedGameTime.TotalMilliseconds;
+            lock (packetProcessQueueLock)
+                while (packetProcessQueue.Any())
+                {
+                    var packet = packetProcessQueue.Dequeue();
+                    if (packet.GetPacketID() == 1)
+                    {
+                        var packet2 = (QueueInteractionPacket)packet;
+                        
+                    }
+                    if (packet.GetPacketID() == 2)
+                    {
+                        var packet2 = (QueueStatusUpdatePacket)packet;
+                        Console.WriteLine(packet2.Accepted);
+                        if (!packet2.Accepted)
+                        {
+                            /*IsServer = null;
+                            selectedUnits.Clear();
+                            ServerIP = null;
+                            ReceivingThread.Abort();
+                            ReceivingThread = null;
+                            ReceiveStatesThread.Abort();
+                            ReceiveStatesThread = null;
+                            curPlayer.playerID = false;
+                            Interaction.MsgBox(
+                                "Server declined your request to connect. You may try connecting to another host.");*/
+                        }
+                    }
+                    if (packet.GetPacketID() == 3)
+                    {
+                        var packet2 = (QueueFinishedPacket)packet;
+                        new Task(() =>
+                        {
+
+                            //var response = Interaction.MsgBox("Would you like to allow " + packet2.nameToConnect + " to connect?", MsgBoxStyle.YesNo);
+                            if (acceptingNewClients)
+                            {
+                                ClientIP = packet2.ipAddressToConnectTo;
+                                PacketQueue.Instance.AddPacket(new ConnectDecisionPacket { Accepted = true });
+                                SendStatePacket(true);
+                            }
+                            else
+                            {
+                                ClientIP = packet2.ipAddressToConnectTo;
+                                PacketQueue.Instance.AddPacket(new ConnectDecisionPacket { Accepted = false });
+                            }
+                        }).Start();
+                    }
+                    /*if (packet.GetPacketID() == 7)
+                    {
+                        var packet2 = (GameStatePacket)packet;
+                        UpdateToState(packet2);
+                        FrameNumber = 0;
+                    }*/
+                    if (packet.GetPacketID() == 8)
+                    {
+                        var packet2 = (InputPacket)packet;
+                        if (!FrameNumber.HasValue)
+                            //x frame delay before starting inputs. This allows the other players inputs to be here before we start processing.
+                            FrameNumber = 0;
+                        ClientInputBuffer.Add(packet2);
+                    }
+                }
+        } 
+        private void UpdateFromClientGamepad(InputPacket input)
+        {
+            //update position based on client input
+            Input playerInput = new Input()
+            {
+                A = input.A,
+                B = input.B,
+                X = input.X,
+                Y = input.Y,
+                RightAnalog = input.RightAnalog,
+                LeftAnalog = input.LeftAnalog,
+                Start = input.Start,
+                down = input.Down,
+                up = input.Up,
+                left = input.Left,
+                right = input.Right,
+                downC = input.DownC,
+                upC = input.UpC,
+                rightC = input.RightC,
+                leftC = input.LeftC,
+                RightTrigger = input.RightTrigger,
+                LeftTrigger = input.LeftTrigger,
+            };
+            playerInputs.Add(new Tuple<int, Input>(input.playerNum, playerInput));
+        }
+        private void KeyDown(object sender, OpenGLEventArgs args)
+        {
+ 
+        }
+        private void SendStatePacket(bool guaranteed = false)
+        {
+            var pack = new GameStatePacket()
+            {
+                //Blackholes = gravityObjects.OfType<Blackhole>().ToList(),
+                //Planets = gravityObjects.OfType<Spheroid>().ToList()
+            };
+
+            var dat = new List<byte>();
+            pack.WritePacketData(dat);
+            if (guaranteed)
+            {
+                PacketQueue.Instance.AddPacket(pack);
+            }
+            else
+            {
+                client3.Send(dat.ToArray(), dat.Count,
+                    new IPEndPoint(new IPAddress(ClientIP.Split('.').Select(byte.Parse).ToArray()), port3));
+            }
         }
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
@@ -35,41 +188,31 @@ namespace SmackBrosGameServer
 
                 //  Load the identity matrix.
                 gl.LoadIdentity();
-
-                //  Rotate around the Y axis.
-                gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
-
-                //  Draw a coloured pyramid.
-                gl.Begin(OpenGL.GL_TRIANGLES);
-                gl.Color(1.0f, 0.0f, 0.0f);
-                gl.Vertex(0.0f, 1.0f, 0.0f);
-                gl.Color(0.0f, 1.0f, 0.0f);
-                gl.Vertex(-1.0f, -1.0f, 1.0f);
-                gl.Color(0.0f, 0.0f, 1.0f);
-                gl.Vertex(1.0f, -1.0f, 1.0f);
-                gl.Color(1.0f, 0.0f, 0.0f);
-                gl.Vertex(0.0f, 1.0f, 0.0f);
-                gl.Color(0.0f, 0.0f, 1.0f);
-                gl.Vertex(1.0f, -1.0f, 1.0f);
-                gl.Color(0.0f, 1.0f, 0.0f);
-                gl.Vertex(1.0f, -1.0f, -1.0f);
-                gl.Color(1.0f, 0.0f, 0.0f);
-                gl.Vertex(0.0f, 1.0f, 0.0f);
-                gl.Color(0.0f, 1.0f, 0.0f);
-                gl.Vertex(1.0f, -1.0f, -1.0f);
-                gl.Color(0.0f, 0.0f, 1.0f);
-                gl.Vertex(-1.0f, -1.0f, -1.0f);
-                gl.Color(1.0f, 0.0f, 0.0f);
-                gl.Vertex(0.0f, 1.0f, 0.0f);
-                gl.Color(0.0f, 0.0f, 1.0f);
-                gl.Vertex(-1.0f, -1.0f, -1.0f);
-                gl.Color(0.0f, 1.0f, 0.0f);
-                gl.Vertex(-1.0f, -1.0f, 1.0f);
-                gl.End();
-
-                //  Nudge the rotation.
-                rotation += 3.0f;
             }
+        }
+        void StartThreads()
+        {
+            new Task(() =>
+            {
+                client = client ?? new UdpClient(port1, AddressFamily.InterNetwork);
+                client2 = client2 ?? new UdpClient(port2, AddressFamily.InterNetwork);
+                client3 = client3 ?? new UdpClient(port3, AddressFamily.InterNetwork);
+                IPHostEntry host;
+                string localIP = "?";
+                host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        localIP = ip.ToString();
+                    }
+                }
+                ServerIP = localIP;
+                ReceivingThread = new Thread(() => PacketQueue.Instance.ReceivingLoop(client2, new IPEndPoint(IPAddress.Any, port2), packetProcessQueue, packetProcessQueueLock));
+                ReceivingThread.IsBackground = true;
+                ReceivingThread.Start();
+            }).Start();
+            serverInitialized = true;
         }
         private void openGLControl_OpenGLInitialized(object sender, OpenGLEventArgs args)
         {

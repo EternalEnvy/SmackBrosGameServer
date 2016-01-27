@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SharpGL, Version=2.3.0.1, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpGLCore.2.3.0.1\lib\net40\SharpGL.dll</HintPath>
       <Private>True</Private>
@@ -70,16 +74,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DamageData.cs" />
+    <Compile Include="FrameData.cs" />
     <Compile Include="GameServerConnectPacket.cs" />
     <Compile Include="GameStatePacket.cs" />
+    <Compile Include="GameTime.cs" />
     <Compile Include="Ground.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="InputPacket.cs" />
     <Compile Include="Ledge.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="PacketQueue.cs" />
+    <Compile Include="QueueFinishedPacket.cs" />
+    <Compile Include="QueueInteractionPacket.cs" />
+    <Compile Include="QueueStatusUpdatePacket.cs" />
     <Compile Include="Smacker.cs" />
     <Compile Include="Stage.cs" />
+    <Compile Include="UpdateLogic.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Wall.cs" />
     <Page Include="MainWindow.xaml">
