@@ -7,15 +7,29 @@ namespace SmackBrosGameServer
 {
     class Smacker
     {
+        protected Vector2 pos;
+        protected Vector2 velocity;
+        
         private FrameData frameData;
         private DamageData damageData;
+        private SpecialMoveData specialData;
+
         private int maxJumps;
         private int curJumps;
+
         public SmackerState state;
-        public int smackerID;
-        public bool isFacingRight;
+        public short smackerID;
         public int frameDurationCurState = 0;
-        protected Vector2 pos;
+        public List<Tuple<Vector2, Vector2, float, bool>>[] currentStateHurtboxes; 
+        public List<Tuple<Vector2, Vector2, float, float, int>>[] currentStateHitboxes;
+        public int maxDurationCurState = 0;
+        public bool isFacingRight;
+        
+        public Smacker(string dataFilePath)
+        {
+            frameData.LoadData(dataFilePath + "\\framedata.txt");
+            damageData.LoadData(dataFilePath + "\\damagedata.txt");
+        }
         public Vector2 Position
         {
             get { return pos; }
@@ -47,6 +61,34 @@ namespace SmackBrosGameServer
                  else return false;
             }
         }
+        public bool StateInDefinite
+        {
+            get
+            {
+                if(state == SmackerState.Standing || state == SmackerState.WalkSlow || state == SmackerState.WalkMedium || 
+                    state == SmackerState.WalkFast || state == SmackerState.Run || state == SmackerState.Fall ||
+                    state == SmackerState.FallF || state == SmackerState.FallB  || state == SmackerState.FallAerial || 
+                    state == SmackerState.FallAerialF || state == SmackerState.FallAerialB || state == SmackerState.FallSpecial || 
+                    state == SmackerState.FallSpecialB || state == SmackerState.FallSpecialF || state == SmackerState.Tumbling ||
+                    state == SmackerState.SquatWait || state == SmackerState.DownWaitUp || state == SmackerState.DownWaitDown ||
+                    state == SmackerState.CaptureWait || state == SmackerState.LedgeHang || state == SmackerState.ShieldHold ||
+                    state == SmackerState.GrabWait || state == SmackerState.LedgeHang || state == SmackerState.Helpless)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public int EnumeratedState
+        {
+            get
+            {
+                return (int)state;
+            }
+            set
+            {
+                state = (SmackerState)value;
+            }
+        }
         public bool CanInput
         {
             get 
@@ -76,112 +118,197 @@ namespace SmackBrosGameServer
                 }
             }
         }
+        public void LoadHitboxes()
+        {
+            var hitboxes = damageData.StateNumToDamageData(this.EnumeratedState);
+            if (hitboxes != null)
+            {
+                currentStateHitboxes = hitboxes;
+            }
+            else return;
+        }
+        public void UpdateFromHitboxes(Stage stage, List<Tuple<int, List<Tuple<Vector2,Vector2,float,float,int>>>> hitboxes)
+        {
+
+            //remove hitboxes that are from the current player, condense the list for simplification
+            var hb = hitboxes.Where(x => x.Item1 != smackerID).Select(y => y.Item2).ToList();
+            velocity.Y += frameData.gravityForce;
+            pos += velocity;
+        }
+        public void UpdateFromInput(Input input, GameData GameMetadata)
+        {
+            if (input.Start)
+            {
+                //pause the game
+                if (GameMetadata.pauseAlpha > 100)
+                {
+                    GameMetadata.GamePaused = !GameMetadata.GamePaused;
+                    GameMetadata.pauseAlpha = 0;
+                }
+            }
+            frameDurationCurState++;
+            if(!StateInDefinite && frameDurationCurState > maxDurationCurState)
+            {
+                if(IsAerial)
+                { 
+                    if (state == SmackerState.AttackAirBack)
+                        state = SmackerState.FallAerialB;
+                    else if (state == SmackerState.AttackAirForward)
+                        state = SmackerState.FallAerialF;
+                    else if (state == SmackerState.AttackAirDown || state == SmackerState.AttackAirUp || state == SmackerState.AttackAirNeutral)
+                        state = SmackerState.FallAerial;
+                    else if (state == SmackerState.AirDodge)
+                        state = SmackerState.Helpless;
+
+                }
+                else if(IsGrounded)
+                {
+                    if(state == SmackerState.JumpSquat)
+                    {
+                        if(input.up == 0 && !input.X && !input.Y)
+                        {
+                            //shorthop
+                            
+                        }
+                        else
+                        {
+                            //regular hop
+                        }
+                    }
+                    else
+                        state = SmackerState.Standing;
+                }
+            } 
+        } 
+        public void UpdateSpecial()
+        {
+
+        }
+        //Position relative to char, movement, radius, Special Modifier (use based on context)
+        public List<Tuple<Vector2, float, bool>> MyHurtboxThisFrame()
+        {
+            if (currentStateHurtboxes.Length > frameDurationCurState)
+            {
+                return currentStateHurtboxes[frameDurationCurState].Select(x => new Tuple<Vector2, float, bool>(x.Item1 + pos, x.Item3, x.Item4)).ToList();
+            }
+            else return null;
+        }
+        public Tuple<int, List<Tuple<Vector2, Vector2, float, float, int>>> HitboxThisFrame()
+        {
+            if (currentStateHitboxes.Length > frameDurationCurState)
+            {
+                return new Tuple<int,List<Tuple<Vector2,Vector2,float,float,int>>>(smackerID, currentStateHitboxes[frameDurationCurState]);
+            }
+            else return null;
+        }
+ 
     }
     enum SmackerState
     {
-        DeadDown,
+        DeadDown,//0
         DeadRight,
         DeadLeft,
         DeadUpStar,
         DeadUpCamera,
-        Rebirth,
+        Rebirth,//5
         RebirthWait,
         Standing,
         WalkSlow,
         WalkMedium,
-        WalkFast,
+        WalkFast,//10
         Turn,
         TurnRun,
         Dash,
         Run,
-        RunBrake,
+        RunBrake,//15
         JumpSquat,
         JumpForward,
         JumpBackward,
         JumpAirF,
-        JumpAirB,
+        JumpAirB,//20
         Fall,
         FallF,
         FallB,
         FallAerial,
-        FallAerialF,
+        FallAerialF,//25
         FallAerialB,
         FallSpecial,
         FallSpecialF,
         FallSpecialB,
-        Tumbling,
+        Tumbling,//30
         Squat,
         SquatWait,
         SquatRv,//going from crouch to stand
         Landing,
-        LandingFallSpecial,
+        LandingFallSpecial,//35
         Attack11,
         Attack12,
         Attack13,
         Attack100Start,
-        Attack100Loop,
+        Attack100Loop,//40
         Attack100End,
         AttackDash,
         AttackUtilt,
         AttackDtilt,
-        AttackFtilt,
+        AttackFtilt,//45
         AttackFsmash,
         AttackDsmash,
         AttackUsmash,
         AttackAirNeutral,
-        AttackAirUp,
+        AttackAirUp,//50
         AttackAirForward,
         AttackAirBack,
         AttackAirDown,
         LandingAirNeutral,
-        LandingAirUp,
+        LandingAirUp,//55
         LandingAirForward,
         LandingAirBack,
         LandingAirDown,
         Special,
-        DamageAir,
+        DamageAir,//60
         DamageGround,
         ShieldOn,
         ShieldHold,
         ShieldBreak,
-        ShieldOff,
+        ShieldOff,//65
         ShieldStunned,
         ShieldReflect,
         NoTechBounceUp,
         DownWaitUp, //Laying on ground facing up
-        DownDamageUp, //Getting hit laying on ground facing up
+        DownDamageUp, //Getting hit laying on ground facing up //70
         DownStandUp,
         DownSpotUp,
         DownAttackU, //  Get up attack from ground face up
         DownBackU,
-        DownForwardU,
+        DownForwardU,//75
         NoTechBounceDown,
         DownWaitDown,
         DownDamageDown,
         TechInPlace,
-        TechForward,
+        TechForward,//80
         TechBack,
         TechWall,
         Grab,
         GrabPull, //pulling character in after grab
-        GrabDash, //boost grab
+        GrabDash, //boost grab //80
         GrabDashPull, //pull after boost grab
         GrabWait,
         GrabPummel,
         GrabBreak, //grab broken
-        ThrowUp,
+        ThrowUp, //85
         ThrowDown,
         ThrowForward,
         ThrowBack,
         CapturePull,
-        CaptureWait,
+        CaptureWait,//90
         CaptureDamage,
         CaptureBreak,
         CaptureThrowUp,
         CaptureThrowDown,
-        CaptureThrowForward,
+        CaptureThrowForward,//95
         CaptureThrowBack,
         AirDodge,
         Helpless,
+        LedgeHang,
     } 
 }

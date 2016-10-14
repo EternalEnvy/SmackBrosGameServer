@@ -30,6 +30,10 @@ namespace SmackBrosGameServer
             this.X = v.X;
             this.Y = v.Y;
         }
+        public void Reverse()
+        {
+            this.Y = -this.Y;
+        }
         public float Length
         {
             get 
@@ -69,11 +73,11 @@ namespace SmackBrosGameServer
         {
             return new Vector2(a.X * scalar, a.Y * scalar);
         }
-        public double Dot(Vector2 other)
+        public float Dot(Vector2 other)
         {
             return Dot(this, other);
         }
-        public static Vector2 operator/(Vector2 v1, double s2)
+        public static Vector2 operator/(Vector2 v1, float s2)
         {
             return
             (
@@ -119,17 +123,17 @@ namespace SmackBrosGameServer
     }
     class Vector3 : IComparable
     {
-        public double X;
-        public double Y;
-        public double Z;
-        public Vector3(double x, double y, double z)
+        public float X;
+        public float Y;
+        public float Z;
+        public Vector3(float x, float y, float z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public Vector3(double[] xyz)
+        public Vector3(float[] xyz)
         {
             if (xyz.Length == 3)
             {
@@ -151,11 +155,11 @@ namespace SmackBrosGameServer
         }
         private const string THREE_COMPONENTS =
            "Array must contain exactly three components , (x,y,z)";
-        public double Magnitude
+        public float Magnitude
         {
             get
             {
-                return Math.Sqrt(SumComponentSqrs());
+                return Convert.ToSingle(Math.Sqrt((float)SumComponentSqrs()));
             }
         }
         public static Vector3 operator +(Vector3 v1, Vector3 v2)
@@ -202,9 +206,9 @@ namespace SmackBrosGameServer
         {
             return v1.SumComponentSqrs() > v2.SumComponentSqrs();
         }
-        public double SumComponentSqrs()
+        public float SumComponentSqrs()
         {
-            return Math.Pow(this.X, 2) + Math.Pow(this.Y, 2) + Math.Pow(this.Z, 2);
+            return Convert.ToSingle(Math.Pow((double)this.X, 2) + Math.Pow((double)this.Y, 2) + Math.Pow((double)this.Z, 2));
         }
         public static bool operator ==(Vector3 v1, Vector3 v2)
         {
@@ -256,7 +260,7 @@ namespace SmackBrosGameServer
                this.Y.Equals(other.Y) &&
                this.Z.Equals(other.Z);
         }
-        public bool Equals(object other, double tolerance)
+        public bool Equals(object other, float tolerance)
         {
             if (other is Vector3)
             {
@@ -265,7 +269,7 @@ namespace SmackBrosGameServer
             return false;
         }
 
-        public bool Equals(Vector3 other, double tolerance)
+        public bool Equals(Vector3 other, float tolerance)
         {
             return
                AlmostEqualsWithAbsTolerance(this.X, other.X, tolerance) &&
@@ -273,9 +277,9 @@ namespace SmackBrosGameServer
                AlmostEqualsWithAbsTolerance(this.Z, other.Z, tolerance);
         }
 
-        public static bool AlmostEqualsWithAbsTolerance(double a, double b, double maxAbsoluteError)
+        public static bool AlmostEqualsWithAbsTolerance(float a, float b, float maxAbsoluteError)
         {
-            double diff = Math.Abs(a - b);
+            float diff = Math.Abs(a - b);
 
             if (a.Equals(b))
             {
@@ -315,7 +319,7 @@ namespace SmackBrosGameServer
                 ARGUMENT_TYPE + other.GetType().ToString(),
                 "other");
         }
-        public static Vector3 operator *(Vector3 v1, double s2)
+        public static Vector3 operator *(Vector3 v1, float s2)
         {
             return
                new Vector3
@@ -325,7 +329,7 @@ namespace SmackBrosGameServer
                   v1.Z * s2
                );
         }
-        public static Vector3 operator *(double s1, Vector3 v2)
+        public static Vector3 operator *(float s1, Vector3 v2)
         {
             return v2 * s1;
         }
@@ -343,7 +347,7 @@ namespace SmackBrosGameServer
         {
             return CrossProduct(this, other);
         }
-        public static double DotProduct(Vector3 v1, Vector3 v2)
+        public static float DotProduct(Vector3 v1, Vector3 v2)
         {
             return
             (
@@ -352,11 +356,11 @@ namespace SmackBrosGameServer
                v1.Z * v2.Z
             );
         }
-        public double DotProduct(Vector3 other)
+        public float DotProduct(Vector3 other)
         {
             return DotProduct(this, other);
         }
-        public static Vector3 operator /(Vector3 v1, double s2)
+        public static Vector3 operator /(Vector3 v1, float s2)
         {
             return
             (
@@ -377,12 +381,12 @@ namespace SmackBrosGameServer
         {
             return IsUnitVector(this);
         }
-        public bool IsUnitVector(double tolerance)
+        public bool IsUnitVector(float tolerance)
         {
             return IsUnitVector(this, tolerance);
         }
 
-        public static bool IsUnitVector(Vector3 v1, double tolerance)
+        public static bool IsUnitVector(Vector3 v1, float tolerance)
         {
             return AlmostEqualsWithAbsTolerance(v1.Magnitude, 1, tolerance);
         }
@@ -403,26 +407,26 @@ namespace SmackBrosGameServer
             }
 
             // Special Cases
-            if (double.IsInfinity(v1.Magnitude))
+            if (float.IsInfinity(v1.Magnitude))
             {
                 var x =
                     v1.X == 0 ? 0 :
                         v1.X == -0 ? -0 :
-                            double.IsPositiveInfinity(v1.X) ? 1 :
-                                double.IsNegativeInfinity(v1.X) ? -1 :
-                                    double.NaN;
+                            float.IsPositiveInfinity(v1.X) ? 1 :
+                                float.IsNegativeInfinity(v1.X) ? -1 :
+                                    float.NaN;
                 var y =
                     v1.Y == 0 ? 0 :
                         v1.Y == -0 ? -0 :
-                            double.IsPositiveInfinity(v1.Y) ? 1 :
-                                double.IsNegativeInfinity(v1.Y) ? -1 :
-                                    double.NaN;
+                            float.IsPositiveInfinity(v1.Y) ? 1 :
+                                float.IsNegativeInfinity(v1.Y) ? -1 :
+                                    float.NaN;
                 var z =
                     v1.Z == 0 ? 0 :
                         v1.Z == -0 ? -0 :
-                            double.IsPositiveInfinity(v1.Z) ? 1 :
-                                double.IsNegativeInfinity(v1.Z) ? -1 :
-                                    double.NaN;
+                            float.IsPositiveInfinity(v1.Z) ? 1 :
+                                float.IsNegativeInfinity(v1.Z) ? -1 :
+                                    float.NaN;
 
                 var result = new Vector3(x, y, z);
 
@@ -443,7 +447,7 @@ namespace SmackBrosGameServer
         private static Vector3 NormalizeOrNaN(Vector3 v1)
         {
             // find the inverse of the vectors magnitude
-            double inverse = 1 / v1.Magnitude;
+            float inverse = 1 / v1.Magnitude;
 
             return new Vector3(
                 // multiply each component by the inverse of the magnitude
@@ -457,18 +461,16 @@ namespace SmackBrosGameServer
 
         private const string NORMALIZE_NaN =
             "Cannot normalize a vector when it's magnitude is NaN";
-        public static double Distance(Vector3 v1, Vector3 v2)
+        public static float Distance(Vector3 v1, Vector3 v2)
         {
             return
-               Math.Sqrt
-               (
+               Convert.ToSingle(Math.Sqrt((float)(
                    (v1.X - v2.X) * (v1.X - v2.X) +
                    (v1.Y - v2.Y) * (v1.Y - v2.Y) +
-                   (v1.Z - v2.Z) * (v1.Z - v2.Z)
-               );
+                   (v1.Z - v2.Z) * (v1.Z - v2.Z))));
         }
 
-        public double Distance(Vector3 other)
+        public float Distance(Vector3 other)
         {
             return Distance(this, other);
         }

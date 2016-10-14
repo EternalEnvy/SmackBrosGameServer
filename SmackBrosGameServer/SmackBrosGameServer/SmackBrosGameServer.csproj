@@ -76,6 +76,8 @@
     </ApplicationDefinition>
     <Compile Include="DamageData.cs" />
     <Compile Include="FrameData.cs" />
+    <Compile Include="GameData.cs" />
+    <Compile Include="GameServerAcceptedJoinPacket.cs" />
     <Compile Include="GameServerConnectPacket.cs" />
     <Compile Include="GameStatePacket.cs" />
     <Compile Include="GameTime.cs" />
@@ -85,15 +87,19 @@
     <Compile Include="Ledge.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="PacketQueue.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="QueueFinishedPacket.cs" />
+    <Compile Include="QueueGameInfo.cs" />
     <Compile Include="QueueInteractionPacket.cs" />
     <Compile Include="QueueStatusUpdatePacket.cs" />
     <Compile Include="Smacker.cs" />
+    <Compile Include="SpecialMoveData.cs" />
     <Compile Include="Stage.cs" />
+    <Compile Include="StageElement.cs" />
     <Compile Include="UpdateLogic.cs" />
     <Compile Include="Vector.cs" />
-    <Compile Include="Wall.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Rectangle.cs" />
+    <Page Include="GameServerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -103,9 +109,8 @@
     </Compile>
     <Compile Include="Hitbox.cs" />
     <Compile Include="HitboxCollisionSphere.cs" />
-    <Compile Include="Hurtbox.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="GameServerWindow.xaml.cs">
+      <DependentUpon>GameServerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

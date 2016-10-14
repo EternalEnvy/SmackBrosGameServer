@@ -10,6 +10,7 @@ namespace SmackBrosGameServer
 {
     class PacketQueue
     {
+        static List<IPEndPoint> clientIPList = new List<IPEndPoint>();
         bool receiveActive = true;
         static readonly object lockobj = new object();
         public static PacketQueue Instance = new PacketQueue();
@@ -44,6 +45,10 @@ namespace SmackBrosGameServer
         public void Deactivate()
         {
             receiveActive = false;
+        }
+        public void AddClient(string ip, int port)
+        {
+            clientIPList.Add(new IPEndPoint(new IPAddress(ip.Split('.').Select(byte.Parse).ToArray()), port));
         }
         public Packet[] ReceivePackets(Stream stream)
         {
@@ -86,7 +91,6 @@ namespace SmackBrosGameServer
         public void WritePackets(List<byte> stream)
         {
             WriteLong(stream, id - 1);
-
             WriteLong(stream, lastReceivedFromOther);
 
             lock (lockobj)
@@ -132,11 +136,15 @@ namespace SmackBrosGameServer
                 }
             }
         }
-        public static void SendFunc(UdpClient client, IPEndPoint serverIP)
+        public static void SendFunc(UdpClient client)
         {
             var buffer = new List<byte>();
             Instance.WritePackets(buffer);
-            client.Send(buffer.ToArray(), buffer.Count, serverIP);
+            foreach(IPEndPoint endPoint in clientIPList)
+            {
+                client.Send(buffer.ToArray(), buffer.Count, endPoint);
+            }
+            
         }
     }
 }

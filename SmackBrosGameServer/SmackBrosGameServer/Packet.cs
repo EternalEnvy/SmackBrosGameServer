@@ -42,6 +42,10 @@ namespace SmackBrosGameServer
                     packet = new InputPacket();
                     packet.ReadPacketData(stream);
                     return packet;
+                case 9:
+                    packet = new QueueGameInfoPacket();
+                    packet.ReadPacketData(stream);
+                    return packet;
                 default:
                     throw new Exception("Unrecognized Packet Type");
             }

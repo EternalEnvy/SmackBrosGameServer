@@ -6,16 +6,16 @@ using System.Windows;
 
 namespace SmackBrosGameServer
 {
-    public partial class MainWindow : Window
+    public partial class GameServerWindow : Window
     {
         static const int MaxStickExtension = 100;
         public void Update(GameTime gameTime)
         {
-            if(serverInitialized && FrameNumber >= 0)
+            if(serverInitialized && GameMetadata.FrameNumber >= 0)
             {
                 for (int i = 0; i < ClientInputBuffer.Count; i++)
                 {
-                    if(ClientInputBuffer[i].FrameNumber <= FrameNumber)
+                    if(ClientInputBuffer[i].FrameNumber <= GameMetadata.FrameNumber)
                     {
                         var item = ClientInputBuffer[i];
                         UpdateFromClientGamepad(item);
@@ -44,17 +44,6 @@ namespace SmackBrosGameServer
                 (smacker.state == SmackerState.ShieldStunned) || (smacker.state == SmackerState.NoTechBounceUp) || (smacker.state == SmackerState.Helpless))
             {
                 return;
-            }
-
-            //PAUSE GAME
-            if(input.Start)
-            {
-                //pause the game
-                if(pauseAlpha > 100)
-                {
-                    GamePaused = !GamePaused;
-                    pauseAlpha = 0;
-                }
             }
             //ANALOG STICK INPUTS
             if(input.up > 0)
@@ -183,7 +172,7 @@ namespace SmackBrosGameServer
             //TRIGGERS
             if(input.LeftTrigger > 0)
             {
-                if()
+                //if()
             }
             else if(input.RightTrigger > 0)
             {

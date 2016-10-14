@@ -5,20 +5,21 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
-    class Ledge
+    public struct Ledge
     {
-        const double invicibilityTime = 2.5;
+        const int invicibilityTime = 150; //frames
         bool hasPlayerActive;
         bool isFacingRight;
-        double timePlayerOnLedge;
-        Vector2 myOrigin;
+        public Vector2 myOrigin;
         float radius;
-        public void CollideLedge(Smacker smacker)
+        public bool CollideLedge(Vector2 pos, bool FacingRight)
         {
-            if((smacker.Position - myOrigin).Length < radius && (isFacingRight == smacker.isFacingRight))
+            if((pos - myOrigin).Length < radius && (isFacingRight == FacingRight))
             {
-                
+                hasPlayerActive = true;
+                return true;
             }
+            return false;
         }
     }
 }

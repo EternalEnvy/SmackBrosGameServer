@@ -22,22 +22,20 @@ using SharpGL;
 
 namespace SmackBrosGameServer
 {
-    public partial class MainWindow : Window
+    public partial class GameServerWindow : Window
     {
-        private bool DebugMode = true;
-        private bool GamePaused = false;
-        private double pauseAlpha;
-
+        private static bool DebugMode = true;
+        private GameData GameMetadata;
         public static DateTime? lastNetworkReceived = null;
         static int port1 = 1521;
         static int port2 = 1522;
         static int port3 = 1523;
 
         private int numSmackers;
-        private long? FrameNumber = null; 
+        
         bool? IsServer;
         string ServerIP;
-        string ClientIP;
+        List<string> ClientIPList; 
         Thread ReceivingThread;
         Thread ReceiveStatesThread;
         UdpClient client;
@@ -56,14 +54,21 @@ namespace SmackBrosGameServer
         bool acceptingNewClients;
         public bool serverInitialized = false;
 
-        public MainWindow()
+        public GameServerWindow()
         {
             InitializeComponent();
             acceptingNewClients = true;
+            GameMetadata = new GameData()
+            {
+                GamePaused = false,
+                pauseAlpha = 0,
+                GameReadyToStart = false,
+                FrameNumber = null
+            };
         }
         private void Update(GameTime gameTime)
         {
-            pauseAlpha += gameTime.ElapsedGameTime.TotalMilliseconds;
+            GameMetadata.pauseAlpha += gameTime.ElapsedGameTime.TotalMilliseconds;
             lock (packetProcessQueueLock)
                 while (packetProcessQueue.Any())
                 {
@@ -100,14 +105,13 @@ namespace SmackBrosGameServer
                             //var response = Interaction.MsgBox("Would you like to allow " + packet2.nameToConnect + " to connect?", MsgBoxStyle.YesNo);
                             if (acceptingNewClients)
                             {
-                                ClientIP = packet2.ipAddressToConnectTo;
-                                PacketQueue.Instance.AddPacket(new ConnectDecisionPacket { Accepted = true });
+                                ClientIPList.Add(packet2.ipAddressToConnectTo);
+                                PacketQueue.Instance.AddPacket(new GameServerAcceptedJoinPacket { Accepted = true, ipToSend = packet2.ipAddressToConnectTo });
                                 SendStatePacket(true);
                             }
                             else
                             {
-                                ClientIP = packet2.ipAddressToConnectTo;
-                                PacketQueue.Instance.AddPacket(new ConnectDecisionPacket { Accepted = false });
+                                PacketQueue.Instance.AddPacket(new GameServerAcceptedJoinPacket { Accepted = false, ipToSend = packet2.ipAddressToConnectTo });
                             }
                         }).Start();
                     }
@@ -120,10 +124,14 @@ namespace SmackBrosGameServer
                     if (packet.GetPacketID() == 8)
                     {
                         var packet2 = (InputPacket)packet;
-                        if (!FrameNumber.HasValue)
+                        if (!GameMetadata.FrameNumber.HasValue)
                             //x frame delay before starting inputs. This allows the other players inputs to be here before we start processing.
-                            FrameNumber = 0;
+                            GameMetadata.FrameNumber = 0;
                         ClientInputBuffer.Add(packet2);
+                    }
+                    if (packet.GetPacketID() == 9)
+                    {
+                        var packet2 = (QueueGameInfoPacket)packet;
                     }
                 }
         } 
@@ -160,10 +168,8 @@ namespace SmackBrosGameServer
         {
             var pack = new GameStatePacket()
             {
-                //Blackholes = gravityObjects.OfType<Blackhole>().ToList(),
-                //Planets = gravityObjects.OfType<Spheroid>().ToList()
+                Smackers = smackerList.Select(x => new Tuple<short,short,Vector2>(x.smackerID, (short)x.EnumeratedState, x.Position)).ToList(), 
             };
-
             var dat = new List<byte>();
             pack.WritePacketData(dat);
             if (guaranteed)
@@ -172,8 +178,11 @@ namespace SmackBrosGameServer
             }
             else
             {
-                client3.Send(dat.ToArray(), dat.Count,
-                    new IPEndPoint(new IPAddress(ClientIP.Split('.').Select(byte.Parse).ToArray()), port3));
+                foreach (string ClientIP in ClientIPList)
+                {
+                    client3.Send(dat.ToArray(), dat.Count,
+                        new IPEndPoint(new IPAddress(ClientIP.Split('.').Select(byte.Parse).ToArray()), port3));
+                }
             }
         }
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
@@ -182,10 +191,8 @@ namespace SmackBrosGameServer
             {
                 //  Get the OpenGL object.
                 OpenGL gl = openGLControl.OpenGL;
-
                 //  Clear the color and depth buffer.
                 gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-
                 //  Load the identity matrix.
                 gl.LoadIdentity();
             }
