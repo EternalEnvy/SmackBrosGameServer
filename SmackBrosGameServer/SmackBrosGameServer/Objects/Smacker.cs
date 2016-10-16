@@ -20,8 +20,8 @@ namespace SmackBrosGameServer
         public SmackerState state;
         public short smackerID;
         public int frameDurationCurState = 0;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] currentStateHurtboxes; 
-        public List<Tuple<Vector2, Vector2, float, float, int>>[] currentStateHitboxes;
+        public List<Hurtbox>[] currentStateHurtboxes; 
+        public List<Hitbox>[] currentStateHitboxes;
         public int maxDurationCurState = 0;
         public bool isFacingRight;
         
@@ -129,7 +129,6 @@ namespace SmackBrosGameServer
         }
         public void UpdateFromHitboxes(Stage stage, List<Tuple<int, List<Tuple<Vector2,Vector2,float,float,int>>>> hitboxes)
         {
-
             //remove hitboxes that are from the current player, condense the list for simplification
             var hb = hitboxes.Where(x => x.Item1 != smackerID).Select(y => y.Item2).ToList();
             velocity.Y += frameData.gravityForce;
@@ -184,20 +183,20 @@ namespace SmackBrosGameServer
         {
 
         }
-        //Position relative to char, movement, radius, Special Modifier (use based on context)
-        public List<Tuple<Vector2, float, bool>> MyHurtboxThisFrame()
+
+        public Tuple<int, List<Hurtbox>> MyHurtboxThisFrame()
         {
             if (currentStateHurtboxes.Length > frameDurationCurState)
             {
-                return currentStateHurtboxes[frameDurationCurState].Select(x => new Tuple<Vector2, float, bool>(x.Item1 + pos, x.Item3, x.Item4)).ToList();
+                return new Tuple<int, List<Hurtbox>>(smackerID, currentStateHurtboxes[frameDurationCurState]);
             }
             else return null;
         }
-        public Tuple<int, List<Tuple<Vector2, Vector2, float, float, int>>> HitboxThisFrame()
+        public Tuple<int, List<Hitbox>> HitboxThisFrame()
         {
             if (currentStateHitboxes.Length > frameDurationCurState)
             {
-                return new Tuple<int,List<Tuple<Vector2,Vector2,float,float,int>>>(smackerID, currentStateHitboxes[frameDurationCurState]);
+                return new Tuple<int, List<Hitbox>>(smackerID, currentStateHitboxes[frameDurationCurState]);
             }
             else return null;
         }

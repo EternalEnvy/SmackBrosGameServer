@@ -5,34 +5,53 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
+    struct CollisionData
+    {
+        int damage;
+        int priority;
+        Vector2 direction;
+        public CollisionData(int dmg, int prio, Vector2 dir)
+        {
+            damage = dmg;
+            priority = prio;
+            direction = dir;
+        }
+        public int Priority
+        {
+            get
+            {
+                return priority;
+            }
+        }
+    }
     class Hitbox
     {
         List<HitboxCollisionSphere> currentHitboxes = new List<HitboxCollisionSphere>();
         List<HitboxCollisionSphere> lastFrameHitboxes = new List<HitboxCollisionSphere>();
 
-        public object Collision(Hurtbox hb)
+        public object Collision(Hurtbox hurtbox)
         {
-            List<Tuple<int, int, Vector2>> collisions = new List<Tuple<int, int, Vector2>>();
-            foreach(Tuple<double, Vector2> collisionBubble in hb.boxes)
+            List<CollisionData> collisions = new List<CollisionData>();
+            foreach(HurtBoxData collisionBubble in hurtbox.hurtBoxes)
             {
                 foreach(HitboxCollisionSphere hcs in currentHitboxes)
                 {
-                    var d = Math.Round(Vector2.Distance(collisionBubble.Item2, hcs.centre));
-                    var e = Math.Round(collisionBubble.Item1 + hcs.radius);
-                    if(e < d)
-                    {
-                        collisions.Add(new Tuple<int,int,Vector2>(hcs.priority, hcs.damage, hcs.directionKnock));
-                    }
-                    if(e == d)
+                    var d = Math.Round(Vector2.Distance(collisionBubble.position, hcs.centre));
+                    var e = Math.Round(collisionBubble.radius + hcs.radius);
+                    if(Math.Abs(e - d) < 0.005)
                     {
                         //phantom hit
-                        collisions.Add(new Tuple<int,int,Vector2>(hcs.priority, hcs.damage / 2, Vector2.Zero));
+                        collisions.Add(new CollisionData(hcs.priority, hcs.damage / 2, Vector2.Zero));
+                    }
+                    if(e < d)
+                    {
+                        collisions.Add(new CollisionData(hcs.priority, hcs.damage, hcs.directionKnock));
                     }
                 }
                 for(int i = Math.Min(currentHitboxes.Count, lastFrameHitboxes.Count); i >= 0; i--)
                 {
-                    if (IntersectsRay(currentHitboxes[i].centre, lastFrameHitboxes[i].centre, collisionBubble.Item2, collisionBubble.Item1))
-                        collisions.Add(new Tuple<int, int, Vector2>(currentHitboxes[i].priority, currentHitboxes[i].damage, currentHitboxes[i].directionKnock));
+                    if (IntersectsRay(currentHitboxes[i].centre, lastFrameHitboxes[i].centre, collisionBubble.position, collisionBubble.radius))
+                        collisions.Add(new CollisionData(currentHitboxes[i].priority, currentHitboxes[i].damage, currentHitboxes[i].directionKnock));
                 }
             }
             Sort_Merge(ref collisions, 0, collisions.Count);
@@ -40,16 +59,16 @@ namespace SmackBrosGameServer
                 return collisions[0];
             else return null;
         }
-        private void Merge_By_Priority(ref List<Tuple<int,int,Vector2>> collisions, int left, int middle, int right)
+        private void Merge_By_Priority(ref List<CollisionData> collisions, int left, int middle, int right)
         {
             //find the lengths of the two halves
             int lengthLeft = middle - left;
             int lengthRight = right - middle;
             //set the final element of both arrays to infinity
-            Tuple<int,int,Vector2>[] leftArray = new Tuple<int,int,Vector2>[lengthLeft + 2];
-            Tuple<int,int,Vector2> temp = new Tuple<int,int,Vector2>(0, 0, Vector2.Zero);
+            CollisionData[] leftArray = new CollisionData[lengthLeft + 2];
+            CollisionData temp = new CollisionData(0, 0, Vector2.Zero);
             leftArray[lengthLeft + 1] = temp;
-            Tuple<int,int,Vector2>[] rightArray = new Tuple<int,int,Vector2>[lengthRight + 1];
+            CollisionData[] rightArray = new CollisionData[lengthRight + 1];
             rightArray[lengthRight] = temp;
             //create the two arrays that will be used to 
             for (int i = 0; i <= lengthLeft; i++)
@@ -65,7 +84,7 @@ namespace SmackBrosGameServer
             //take the lower element of the two arrays and add it to the new sorted array
             for (int k = left; k <= right; k++)
             {
-                if (leftArray[iIndex].Item1 >= rightArray[jIndex].Item1)
+                if (leftArray[iIndex].Priority >= rightArray[jIndex].Priority)
                 {
                     collisions[k] = leftArray[iIndex];
                     iIndex++;
@@ -77,7 +96,7 @@ namespace SmackBrosGameServer
                 }
             }
         }
-        private void Sort_Merge(ref List<Tuple<int,int,Vector2>> collisions, int left, int right)
+        private void Sort_Merge(ref List<CollisionData> collisions, int left, int right)
         {
             //Mergesort is the "serious" sorting algorithm
             int mid;

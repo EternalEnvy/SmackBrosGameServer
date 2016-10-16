@@ -9,6 +9,10 @@ namespace SmackBrosGameServer
     {
         Rectangle bounds;
         bool canGoThroughFromBelow;
+        public Rectangle GetBounds()
+        {
+            return bounds;
+        }
         public bool HitElement(Vector2 pos, int height)
         {
             if(canGoThroughFromBelow)

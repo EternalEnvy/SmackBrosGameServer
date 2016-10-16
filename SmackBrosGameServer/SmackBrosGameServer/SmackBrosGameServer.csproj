@@ -74,31 +74,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DamageData.cs" />
-    <Compile Include="FrameData.cs" />
-    <Compile Include="GameData.cs" />
-    <Compile Include="GameServerAcceptedJoinPacket.cs" />
-    <Compile Include="GameServerConnectPacket.cs" />
-    <Compile Include="GameStatePacket.cs" />
-    <Compile Include="GameTime.cs" />
-    <Compile Include="Ground.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="InputPacket.cs" />
-    <Compile Include="Ledge.cs" />
-    <Compile Include="Packet.cs" />
-    <Compile Include="PacketQueue.cs" />
-    <Compile Include="Projectile.cs" />
-    <Compile Include="QueueFinishedPacket.cs" />
-    <Compile Include="QueueGameInfo.cs" />
-    <Compile Include="QueueInteractionPacket.cs" />
-    <Compile Include="QueueStatusUpdatePacket.cs" />
-    <Compile Include="Smacker.cs" />
-    <Compile Include="SpecialMoveData.cs" />
-    <Compile Include="Stage.cs" />
-    <Compile Include="StageElement.cs" />
+    <Compile Include="DataStructures\DamageData.cs" />
+    <Compile Include="DataStructures\FrameData.cs" />
+    <Compile Include="DataStructures\GameData.cs" />
+    <Compile Include="DataStructures\Hurtbox.cs" />
+    <Compile Include="DataStructures\PickledSmackerData.cs" />
+    <Compile Include="Networking\GameServerAcceptedJoinPacket.cs" />
+    <Compile Include="Networking\GameServerConnectPacket.cs" />
+    <Compile Include="Networking\GameStatePacket.cs" />
+    <Compile Include="Utility\GameTime.cs" />
+    <Compile Include="Objects\Ground.cs" />
+    <Compile Include="DataStructures\Input.cs" />
+    <Compile Include="Networking\InputPacket.cs" />
+    <Compile Include="Objects\Ledge.cs" />
+    <Compile Include="Networking\Packet.cs" />
+    <Compile Include="Networking\PacketQueue.cs" />
+    <Compile Include="Objects\Projectile.cs" />
+    <Compile Include="Networking\QueueFinishedPacket.cs" />
+    <Compile Include="Networking\QueueGameInfo.cs" />
+    <Compile Include="Networking\QueueInteractionPacket.cs" />
+    <Compile Include="Networking\QueueStatusUpdatePacket.cs" />
+    <Compile Include="Objects\Smacker.cs" />
+    <Compile Include="DataStructures\SpecialMoveData.cs" />
+    <Compile Include="Objects\Stage.cs" />
+    <Compile Include="Objects\StageElement.cs" />
     <Compile Include="UpdateLogic.cs" />
-    <Compile Include="Vector.cs" />
-    <Compile Include="Rectangle.cs" />
+    <Compile Include="Utility\Vector.cs" />
+    <Compile Include="Utility\Rectangle.cs" />
     <Page Include="GameServerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,8 +109,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Hitbox.cs" />
-    <Compile Include="HitboxCollisionSphere.cs" />
+    <Compile Include="DataStructures\Hitbox.cs" />
+    <Compile Include="DataStructures\HitboxCollisionSphere.cs" />
     <Compile Include="GameServerWindow.xaml.cs">
       <DependentUpon>GameServerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -140,6 +142,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
-    public struct Input
+    struct Input
     {
         public int left;
         public int right;

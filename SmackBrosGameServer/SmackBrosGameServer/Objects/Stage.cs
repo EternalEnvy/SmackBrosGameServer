@@ -20,9 +20,20 @@ namespace SmackBrosGameServer
             }
             return null;
         }
-        public bool OnGround(Vector2 lowestPoint)
+        public bool OnGround(Vector2 lowestPoint, Vector2 velocity)
         {
-            double yElement = ledges
+            if (velocity.Y > 0)
+            {
+                foreach (StageElement s in barriers)
+                {
+                    if (s.GetBounds().Intersects(lowestPoint))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else return false;
         }
     }
 }
