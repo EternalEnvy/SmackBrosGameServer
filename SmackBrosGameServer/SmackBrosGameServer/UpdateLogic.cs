@@ -8,8 +8,8 @@ namespace SmackBrosGameServer
 {
     public partial class GameServerWindow : Window
     {
-        static const int MaxStickExtension = 100;
-        public void Update(GameTime gameTime)
+        const int MaxStickExtension = 100;
+        public void Update()
         {
             if(serverInitialized && GameMetadata.FrameNumber >= 0)
             {
@@ -28,7 +28,7 @@ namespace SmackBrosGameServer
             {
                 for(int i = 0; i < playerInputs.Count; i++)
                 {
-                    if (s.smackerID == playerInputs[i].Item1)
+                    if (s.SmackerId == playerInputs[i].Item1)
                     {
                         HandleStateFromInput(s, playerInputs[i].Item2);
                         playerInputs.RemoveAt(i);
@@ -38,10 +38,10 @@ namespace SmackBrosGameServer
         }
         public void HandleStateFromInput(Smacker smacker, Input input)
         {
-            if((smacker.state == SmackerState.DeadDown)||(smacker.state == SmackerState.DeadRight)||(smacker.state == SmackerState.DeadLeft) ||
-                (smacker.state == SmackerState.DeadUpStar) ||(smacker.state == SmackerState.DeadUpCamera) ||(smacker.state == SmackerState.Rebirth) ||
-                (smacker.state == SmackerState.DamageAir) ||(smacker.state == SmackerState.DamageGround) ||(smacker.state == SmackerState.ShieldBreak) ||
-                (smacker.state == SmackerState.ShieldStunned) || (smacker.state == SmackerState.NoTechBounceUp) || (smacker.state == SmackerState.Helpless))
+            if((smacker.State == SmackerState.DeadDown)||(smacker.State == SmackerState.DeadRight)||(smacker.State == SmackerState.DeadLeft) ||
+                (smacker.State == SmackerState.DeadUpStar) ||(smacker.State == SmackerState.DeadUpCamera) ||(smacker.State == SmackerState.Rebirth) ||
+                (smacker.State == SmackerState.DamageAir) ||(smacker.State == SmackerState.DamageGround) ||(smacker.State == SmackerState.ShieldBreak) ||
+                (smacker.State == SmackerState.ShieldStunned) || (smacker.State == SmackerState.NoTechBounceUp) || (smacker.State == SmackerState.Helpless))
             {
                 return;
             }

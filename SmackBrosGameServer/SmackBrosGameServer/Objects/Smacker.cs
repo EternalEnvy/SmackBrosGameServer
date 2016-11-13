@@ -5,42 +5,46 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
-    class Smacker
+    public class Smacker
     {
-        protected Vector2 pos;
-        protected Vector2 velocity;
+        const float HitlagMultiplier = 0.4f;
+        protected Vector2 Pos;
+        protected Vector2 Velocity;
         
-        private FrameData frameData;
-        private DamageData damageData;
-        private SpecialMoveData specialData;
+        private FrameData _frameData;
+        private DamageData _damageData;
+        private SpecialMoveData _specialData;
 
         private int maxJumps;
         private int curJumps;
 
-        public SmackerState state;
-        public short smackerID;
-        public int frameDurationCurState = 0;
-        public List<Hurtbox>[] currentStateHurtboxes; 
-        public List<Hitbox>[] currentStateHitboxes;
-        public int maxDurationCurState = 0;
-        public bool isFacingRight;
+        public SmackerState State;
+        public short SmackerId;
+        public int FrameDurationCurState = 0;
+        public List<Hurtbox>[] CurrentStateHurtboxes; 
+        public List<DamageCircleFrame>[] CurrentStateHitboxes;
+        public int MaxDurationCurState = 0;
+        public bool IsFacingRight;
+
+        public float HitstunDuration {get; set;}
+        public int Damage {get; set;}
         
         public Smacker(string dataFilePath)
         {
-            frameData.LoadData(dataFilePath + "\\framedata.txt");
-            damageData.LoadData(dataFilePath + "\\damagedata.txt");
+            _frameData.LoadData(dataFilePath + "\\framedata.txt");
+            _damageData.LoadData(dataFilePath + "\\damagedata.txt");
         }
         public Vector2 Position
         {
-            get { return pos; }
-            set { pos = value; }
+            get { return Pos; }
+            set { Pos = value; }
         }
         public bool IsAerial
         {
             get
             {
-                if (state == SmackerState.Fall || state == SmackerState.FallAerial || state == SmackerState.FallAerialB ||
-                    state == SmackerState.FallAerialF || state == SmackerState.Tumbling)
+                if (State == SmackerState.Fall || State == SmackerState.FallAerial || State == SmackerState.FallAerialB ||
+                    State == SmackerState.FallAerialF || State == SmackerState.Tumbling)
                 {
                     return true;
                 }
@@ -51,10 +55,10 @@ namespace SmackBrosGameServer
         {
             get
             {
-                 if(state == SmackerState.WalkFast || state == SmackerState.WalkMedium || state == SmackerState.WalkSlow ||
-                    state == SmackerState.Standing || state == SmackerState.SquatWait || state == SmackerState.SquatRv ||
-                     state == SmackerState.Squat || state == SmackerState.TurnRun || state == SmackerState.Turn || 
-                     state == SmackerState.Run || state == SmackerState.RunBrake)
+                 if(State == SmackerState.WalkFast || State == SmackerState.WalkMedium || State == SmackerState.WalkSlow ||
+                    State == SmackerState.Standing || State == SmackerState.SquatWait || State == SmackerState.SquatRv ||
+                     State == SmackerState.Squat || State == SmackerState.TurnRun || State == SmackerState.Turn || 
+                     State == SmackerState.Run || State == SmackerState.RunBrake)
                  {
                      return true;
                  }
@@ -65,14 +69,14 @@ namespace SmackBrosGameServer
         {
             get
             {
-                if(state == SmackerState.Standing || state == SmackerState.WalkSlow || state == SmackerState.WalkMedium || 
-                    state == SmackerState.WalkFast || state == SmackerState.Run || state == SmackerState.Fall ||
-                    state == SmackerState.FallF || state == SmackerState.FallB  || state == SmackerState.FallAerial || 
-                    state == SmackerState.FallAerialF || state == SmackerState.FallAerialB || state == SmackerState.FallSpecial || 
-                    state == SmackerState.FallSpecialB || state == SmackerState.FallSpecialF || state == SmackerState.Tumbling ||
-                    state == SmackerState.SquatWait || state == SmackerState.DownWaitUp || state == SmackerState.DownWaitDown ||
-                    state == SmackerState.CaptureWait || state == SmackerState.LedgeHang || state == SmackerState.ShieldHold ||
-                    state == SmackerState.GrabWait || state == SmackerState.LedgeHang || state == SmackerState.Helpless)
+                if(State == SmackerState.Standing || State == SmackerState.WalkSlow || State == SmackerState.WalkMedium || 
+                    State == SmackerState.WalkFast || State == SmackerState.Run || State == SmackerState.Fall ||
+                    State == SmackerState.FallF || State == SmackerState.FallB  || State == SmackerState.FallAerial || 
+                    State == SmackerState.FallAerialF || State == SmackerState.FallAerialB || State == SmackerState.FallSpecial || 
+                    State == SmackerState.FallSpecialB || State == SmackerState.FallSpecialF || State == SmackerState.Tumbling ||
+                    State == SmackerState.SquatWait || State == SmackerState.DownWaitUp || State == SmackerState.DownWaitDown ||
+                    State == SmackerState.CaptureWait || State == SmackerState.LedgeHang || State == SmackerState.ShieldHold ||
+                    State == SmackerState.GrabWait || State == SmackerState.LedgeHang || State == SmackerState.Helpless)
                     return true;
                 else
                     return false;
@@ -82,22 +86,22 @@ namespace SmackBrosGameServer
         {
             get
             {
-                return (int)state;
+                return (int)State;
             }
             set
             {
-                state = (SmackerState)value;
+                State = (SmackerState)value;
             }
         }
         public bool CanInput
         {
             get 
             {
-                if (state == SmackerState.DeadDown || state == SmackerState.DeadRight || state == SmackerState.DeadLeft ||
-                    state == SmackerState.DeadUpStar || state == SmackerState.DeadUpCamera || state == SmackerState.Rebirth ||
-                    state == SmackerState.DamageAir || state == SmackerState.DamageGround || state == SmackerState.ShieldBreak ||
-                    state == SmackerState.ShieldStunned || state == SmackerState.NoTechBounceUp || state == SmackerState.Helpless||
-                    state == SmackerState.NoTechBounceDown || state == SmackerState.TechForward || state == SmackerState.TechBack)
+                if (State == SmackerState.DeadDown || State == SmackerState.DeadRight || State == SmackerState.DeadLeft ||
+                    State == SmackerState.DeadUpStar || State == SmackerState.DeadUpCamera || State == SmackerState.Rebirth ||
+                    State == SmackerState.DamageAir || State == SmackerState.DamageGround || State == SmackerState.ShieldBreak ||
+                    State == SmackerState.ShieldStunned || State == SmackerState.NoTechBounceUp || State == SmackerState.Helpless||
+                    State == SmackerState.NoTechBounceDown || State == SmackerState.TechForward || State == SmackerState.TechBack)
                 {
                     return false;
                 }
@@ -120,19 +124,24 @@ namespace SmackBrosGameServer
         }
         public void LoadHitboxes()
         {
-            var hitboxes = damageData.StateNumToDamageData(this.EnumeratedState);
+            var hitboxes = _damageData.StateNumToDamageData(this.EnumeratedState);
             if (hitboxes != null)
             {
-                currentStateHitboxes = hitboxes;
+                CurrentStateHitboxes = hitboxes;
             }
             else return;
         }
         public void UpdateFromHitboxes(Stage stage, List<Tuple<int, List<Tuple<Vector2,Vector2,float,float,int>>>> hitboxes)
         {
             //remove hitboxes that are from the current player, condense the list for simplification
-            var hb = hitboxes.Where(x => x.Item1 != smackerID).Select(y => y.Item2).ToList();
-            velocity.Y += frameData.gravityForce;
-            pos += velocity;
+            var hb = hitboxes.Where(x => x.Item1 != SmackerId).Select(y => y.Item2).ToList();
+            Velocity.Y += _frameData.gravityForce;
+            Pos += Velocity;
+        }
+        private void DealDamage(int damage)
+        {
+            HitstunDuration += HitlagMultiplier * damage;
+            Damage += damage;
         }
         public void UpdateFromInput(Input input, GameData GameMetadata)
         {
@@ -145,24 +154,24 @@ namespace SmackBrosGameServer
                     GameMetadata.pauseAlpha = 0;
                 }
             }
-            frameDurationCurState++;
-            if(!StateInDefinite && frameDurationCurState > maxDurationCurState)
+            FrameDurationCurState++;
+            if(!StateInDefinite && FrameDurationCurState > MaxDurationCurState)
             {
                 if(IsAerial)
                 { 
-                    if (state == SmackerState.AttackAirBack)
-                        state = SmackerState.FallAerialB;
-                    else if (state == SmackerState.AttackAirForward)
-                        state = SmackerState.FallAerialF;
-                    else if (state == SmackerState.AttackAirDown || state == SmackerState.AttackAirUp || state == SmackerState.AttackAirNeutral)
-                        state = SmackerState.FallAerial;
-                    else if (state == SmackerState.AirDodge)
-                        state = SmackerState.Helpless;
+                    if (State == SmackerState.AttackAirBack)
+                        State = SmackerState.FallAerialB;
+                    else if (State == SmackerState.AttackAirForward)
+                        State = SmackerState.FallAerialF;
+                    else if (State == SmackerState.AttackAirDown || State == SmackerState.AttackAirUp || State == SmackerState.AttackAirNeutral)
+                        State = SmackerState.FallAerial;
+                    else if (State == SmackerState.AirDodge)
+                        State = SmackerState.Helpless;
 
                 }
                 else if(IsGrounded)
                 {
-                    if(state == SmackerState.JumpSquat)
+                    if(State == SmackerState.JumpSquat)
                     {
                         if(input.up == 0 && !input.X && !input.Y)
                         {
@@ -175,7 +184,7 @@ namespace SmackBrosGameServer
                         }
                     }
                     else
-                        state = SmackerState.Standing;
+                        State = SmackerState.Standing;
                 }
             } 
         } 
@@ -186,19 +195,19 @@ namespace SmackBrosGameServer
 
         public Tuple<int, List<Hurtbox>> MyHurtboxThisFrame()
         {
-            if (currentStateHurtboxes.Length > frameDurationCurState)
+            if (CurrentStateHurtboxes.Length > FrameDurationCurState)
             {
-                return new Tuple<int, List<Hurtbox>>(smackerID, currentStateHurtboxes[frameDurationCurState]);
+                return new Tuple<int, List<Hurtbox>>(SmackerId, CurrentStateHurtboxes[FrameDurationCurState]);
             }
             else return null;
         }
-        public Tuple<int, List<Hitbox>> HitboxThisFrame()
+        public Tuple<int, List<DamageCircleFrame>> HitboxThisFrame()
         {
-            if (currentStateHitboxes.Length > frameDurationCurState)
+            if (CurrentStateHitboxes.Length > FrameDurationCurState)
             {
-                return new Tuple<int, List<Hitbox>>(smackerID, currentStateHitboxes[frameDurationCurState]);
+                return new Tuple<int, List<DamageCircleFrame>>(SmackerId, CurrentStateHitboxes[FrameDurationCurState]);
             }
-            else return null;
+            return null;
         }
  
     }

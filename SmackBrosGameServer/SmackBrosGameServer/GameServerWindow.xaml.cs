@@ -168,7 +168,7 @@ namespace SmackBrosGameServer
         {
             var pack = new GameStatePacket()
             {
-                Smackers = smackerList.Select(x => new Tuple<short,short,Vector2>(x.smackerID, (short)x.EnumeratedState, x.Position)).ToList(), 
+                Smackers = smackerList.Select(x => new PickledSmackerData(x.Position, x.SmackerId, (short)x.State, (short)x.FrameDurationCurState, x.IsFacingRight)).ToList()
             };
             var dat = new List<byte>();
             pack.WritePacketData(dat);

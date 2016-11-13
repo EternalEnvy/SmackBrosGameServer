@@ -6,8 +6,29 @@ using OpenTK;
 
 namespace SmackBrosGameServer
 {
-    class Vector2
+    public class Vector2
     {
+        protected bool Equals(Vector2 other)
+        {
+            return x.Equals(other.x) && y.Equals(other.y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Vector2) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (x.GetHashCode()*397) ^ y.GetHashCode();
+            }
+        }
+
         private float x;
         private float y;
         public float X
@@ -224,18 +245,16 @@ namespace SmackBrosGameServer
         public override bool Equals(object other)
         {
             // Check object other is a Vector3 object
-            if (other is Vector3)
+            var vector = other as Vector3;
+            if (vector != null)
             {
                 // Convert object to Vector3
-                Vector3 otherVector = (Vector3)other;
+                Vector3 otherVector = vector;
 
                 // Check for equality
                 return otherVector.Equals(this);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         public static Vector3 Transform(Vector3 position, Matrix4 matrix)
         {
@@ -303,11 +322,11 @@ namespace SmackBrosGameServer
         {
             if (other is Vector3)
             {
-                if (this < (other as Vector3))
+                if (this < (Vector3) other)
                 {
                     return -1;
                 }
-                else if (this > (other as Vector3))
+                else if (this > (Vector3) other)
                 {
                     return 1;
                 }
@@ -316,7 +335,7 @@ namespace SmackBrosGameServer
             // Error condition: other is not a Vector3 object
             throw new ArgumentException(
                 NON_VECTOR_COMPARISON + "\n" +
-                ARGUMENT_TYPE + other.GetType().ToString(),
+                ARGUMENT_TYPE + other.GetType(),
                 "other");
         }
         public static Vector3 operator *(Vector3 v1, float s2)
@@ -350,11 +369,9 @@ namespace SmackBrosGameServer
         public static float DotProduct(Vector3 v1, Vector3 v2)
         {
             return
-            (
-               v1.X * v2.X +
-               v1.Y * v2.Y +
-               v1.Z * v2.Z
-            );
+            v1.X * v2.X +
+            v1.Y * v2.Y +
+            v1.Z * v2.Z;
         }
         public float DotProduct(Vector3 other)
         {
@@ -363,13 +380,11 @@ namespace SmackBrosGameServer
         public static Vector3 operator /(Vector3 v1, float s2)
         {
             return
+            new Vector3
             (
-               new Vector3
-               (
-                  v1.X / s2,
-                  v1.Y / s2,
-                  v1.Z / s2
-               )
+                v1.X / s2,
+                v1.Y / s2,
+                v1.Z / s2
             );
         }
         public static bool IsUnitVector(Vector3 v1)

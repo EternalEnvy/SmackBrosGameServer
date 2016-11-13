@@ -53,42 +53,56 @@ namespace SmackBrosGameServer
         public int RollFowardDuration;
         public int RollBackwardDuration;
 
+        struct FrameDataCircle
+        {
+            Vector2 position;
+            Vector2 characterMovement;
+            float radius;
+            bool modifier; 
+            public FrameDataCircle(Vector2 position, Vector2 characterMovement, float radius, bool modifier)
+            {
+                this.position = position;
+                this.characterMovement = characterMovement;
+                this.radius = radius;
+                this.modifier = modifier;
+            }
+        }
         //Position relative to char, movement, radius, Special Modifier (use based on context)
-        public List<Tuple<Vector2, Vector2, float, bool>>[] walkFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] runFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dashFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] jumpFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] airJumpForwardFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] airJumpBackWardFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] jabFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] jabComboFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] fTiltFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] uTiltFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dTiltFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dashAttackFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] uSmashFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] fSmashFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dSmashFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] fairFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] uairFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dairFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] bairFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] nairFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] grabFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] dashGrabFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] airDodgeFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] spotDodgeFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] rollForwardFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] rollBackwardFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] techInPlaceFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] techForwardFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] techBackFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] techMissFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] getUpDownFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] getUpUpFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] toCrouchFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] toShieldFrames;
-        public List<Tuple<Vector2, Vector2, float, bool>>[] aerialEndLagFrames;
+        public List<FrameDataCircle>[] walkFrames;
+        public List<FrameDataCircle>[] runFrames;
+        public List<FrameDataCircle>[] dashFrames;
+        public List<FrameDataCircle>[] jumpFrames;
+        public List<FrameDataCircle>[] airJumpForwardFrames;
+        public List<FrameDataCircle>[] airJumpBackWardFrames;
+        public List<FrameDataCircle>[] jabFrames;
+        public List<FrameDataCircle>[] jabComboFrames;
+        public List<FrameDataCircle>[] fTiltFrames;
+        public List<FrameDataCircle>[] uTiltFrames;
+        public List<FrameDataCircle>[] dTiltFrames;
+        public List<FrameDataCircle>[] dashAttackFrames;
+        public List<FrameDataCircle>[] uSmashFrames;
+        public List<FrameDataCircle>[] fSmashFrames;
+        public List<FrameDataCircle>[] dSmashFrames;
+        public List<FrameDataCircle>[] fairFrames;
+        public List<FrameDataCircle>[] uairFrames;
+        public List<FrameDataCircle>[] dairFrames;
+        public List<FrameDataCircle>[] bairFrames;
+        public List<FrameDataCircle>[] nairFrames;
+        public List<FrameDataCircle>[] grabFrames;
+        public List<FrameDataCircle>[] dashGrabFrames;
+        public List<FrameDataCircle>[] airDodgeFrames;
+        public List<FrameDataCircle>[] spotDodgeFrames;
+        public List<FrameDataCircle>[] rollForwardFrames;
+        public List<FrameDataCircle>[] rollBackwardFrames;
+        public List<FrameDataCircle>[] techInPlaceFrames;
+        public List<FrameDataCircle>[] techForwardFrames;
+        public List<FrameDataCircle>[] techBackFrames;
+        public List<FrameDataCircle>[] techMissFrames;
+        public List<FrameDataCircle>[] getUpDownFrames;
+        public List<FrameDataCircle>[] getUpUpFrames;
+        public List<FrameDataCircle>[] toCrouchFrames;
+        public List<FrameDataCircle>[] toShieldFrames;
+        public List<FrameDataCircle>[] aerialEndLagFrames;
 
         public bool LoadData(string path)
         {
@@ -184,7 +198,7 @@ namespace SmackBrosGameServer
             }
             return Convert.ToSingle(line);
         }
-        private List<Tuple<Vector2, Vector2, float, bool>>[] AddFrameData(StreamReader reader)
+        private List<FrameDataCircle>[] AddFrameData(StreamReader reader)
         {
             string line = reader.ReadLine();
             while(line.Substring(0,1) == "#")
@@ -193,7 +207,7 @@ namespace SmackBrosGameServer
             }
             int numFrames = Convert.ToInt32(line);
             int numHitboxes;
-            var Frames = new List<Tuple<Vector2, Vector2, float, bool>>[numFrames];
+            var Frames = new List<FrameDataCircle>[numFrames];
             for (int i = 0; i < numFrames; i++)
             {
                 numHitboxes = Convert.ToInt32(reader.ReadLine());
@@ -201,7 +215,7 @@ namespace SmackBrosGameServer
                 {
                     string[] data = reader.ReadLine().Split(' ');
                     Frames[i].Add(
-                        new Tuple<Vector2, Vector2, float, bool>(
+                        new FrameDataCircle(
                             new Vector2(Convert.ToSingle(data[0]), Convert.ToSingle(data[1])),
                             new Vector2(Convert.ToSingle(data[2]), Convert.ToSingle(data[3])),
                             Convert.ToSingle(data[4]),
