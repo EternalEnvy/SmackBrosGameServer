@@ -53,7 +53,7 @@ namespace SmackBrosGameServer
         public int RollFowardDuration;
         public int RollBackwardDuration;
 
-        struct FrameDataCircle
+        public struct FrameDataCircle
         {
             Vector2 position;
             Vector2 characterMovement;
