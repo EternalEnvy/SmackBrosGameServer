@@ -7,24 +7,24 @@ namespace SmackBrosGameServer
 {
     public class StageElement
     {
-        Rectangle bounds;
-        bool canGoThroughFromBelow;
+        Rectangle _bounds;
+        bool _canGoThroughFromBelow;
         public Rectangle GetBounds()
         {
-            return bounds;
+            return _bounds;
         }
         public bool HitElement(Vector2 pos, int height)
         {
-            if(canGoThroughFromBelow)
+            if(_canGoThroughFromBelow)
             {
-                if(bounds.Intersects(pos) && pos.Y + height > (bounds.BOTL + (bounds.BOTR - bounds.BOTL).Normalize() * Vector2.Projection(bounds.BOTR - bounds.BOTL, pos).Length).Y)
+                if(_bounds.Intersects(pos) && pos.Y + height > (_bounds.Botl + (_bounds.Botr - _bounds.Botl).Normalize() * Vector2.Projection(_bounds.Botr - _bounds.Botl, pos).Length).Y)
                 {
                     return true;
                 }
             }
             else
             {
-                if(bounds.Intersects(pos))
+                if(_bounds.Intersects(pos))
                 {
                     return true;
                 }

@@ -7,24 +7,24 @@ namespace SmackBrosGameServer
 {
     class HitboxCollisionSphere
     {
-        private int curFrame = 0;
-        private List<Vector2> positions = new List<Vector2>();
+        private int _curFrame = 0;
+        private List<Vector2> _positions = new List<Vector2>();
 
-        public float radius;
-        public int priority;
-        public int damage;
+        public float Radius;
+        public int Priority;
+        public int Damage;
       
-        public Vector2 centre;       
-        public Vector2 directionKnock;
+        public Vector2 Centre;       
+        public Vector2 DirectionKnock;
 
         public HitboxCollisionSphere(List<Vector2> positions, Vector2 start, Vector2 direction, float rad, int dmg, int prio)
         {
-            this.damage = dmg;
-            this.positions = positions;
-            this.directionKnock = direction;
-            this.radius = rad;
-            this.priority = prio;
-            this.centre = start;
+            this.Damage = dmg;
+            this._positions = positions;
+            this.DirectionKnock = direction;
+            this.Radius = rad;
+            this.Priority = prio;
+            this.Centre = start;
         }
     }
 }

@@ -7,15 +7,15 @@ namespace SmackBrosGameServer
 {
     class Stage
     {
-        List<Ledge> ledges = new List<Ledge>();
-        List<StageElement> barriers = new List<StageElement>();
+        List<Ledge> _ledges = new List<Ledge>();
+        List<StageElement> _barriers = new List<StageElement>();
         public Vector2 GrabLedge(Vector2 pos, bool isFacingRight)
         {
-            foreach(Ledge ledge in ledges)
+            foreach(Ledge ledge in _ledges)
             {
                 if(ledge.CollideLedge(pos, isFacingRight))
                 {
-                    return ledge.myOrigin;
+                    return ledge.MyOrigin;
                 }
             }
             return null;
@@ -24,7 +24,7 @@ namespace SmackBrosGameServer
         {
             if (velocity.Y > 0)
             {
-                foreach (StageElement s in barriers)
+                foreach (StageElement s in _barriers)
                 {
                     if (s.GetBounds().Intersects(lowestPoint))
                     {

@@ -9,7 +9,7 @@ namespace SmackBrosGameServer
     {
         public bool GamePaused;
         public bool GameReadyToStart;
-        public double pauseAlpha;
+        public double PauseAlpha;
         public long? FrameNumber;
     }
 }

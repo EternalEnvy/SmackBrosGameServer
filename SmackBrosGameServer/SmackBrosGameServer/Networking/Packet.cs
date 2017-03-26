@@ -9,7 +9,7 @@ namespace SmackBrosGameServer
 {
     abstract class Packet
     {
-        protected byte typeID;
+        protected byte TypeId;
         public abstract void WritePacketData(List<byte> stream);
         public abstract void ReadPacketData(Stream stream);
 
@@ -53,7 +53,7 @@ namespace SmackBrosGameServer
 
         public static void WritePacket(List<byte> stream, Packet packet)
         {
-            stream.Add(packet.typeID);
+            stream.Add(packet.TypeId);
             packet.WritePacketData(stream);
         }
 
@@ -198,9 +198,9 @@ namespace SmackBrosGameServer
             stream.AddRange(bytes);
         }
 
-        public byte GetPacketID()
+        public byte GetPacketId()
         {
-            return typeID;
+            return TypeId;
         } 
     }
 }

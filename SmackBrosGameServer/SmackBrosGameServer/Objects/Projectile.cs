@@ -7,6 +7,6 @@ namespace SmackBrosGameServer
 {
     public class Projectile
     {
-        float gravityEffect;
+        float _gravityEffect;
     }
 }

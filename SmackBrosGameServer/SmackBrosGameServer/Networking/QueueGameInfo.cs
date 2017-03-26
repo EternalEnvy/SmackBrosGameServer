@@ -8,20 +8,20 @@ namespace SmackBrosGameServer
 {
     class QueueGameInfoPacket : Packet
     {
-        List<string> ipAddresses = new List<string>();
+        List<string> _ipAddresses = new List<string>();
         public override void WritePacketData(List<byte> stream)
         {
-            WriteInt(stream, ipAddresses.Count());
-            for(int i = 0, len = ipAddresses.Count(); i < len; i++)
+            WriteInt(stream, _ipAddresses.Count());
+            for(int i = 0, len = _ipAddresses.Count(); i < len; i++)
             {
-                WriteStringBytes(stream, ipAddresses[i]);
+                WriteStringBytes(stream, _ipAddresses[i]);
             }
         }
         public override void ReadPacketData(Stream stream)
         {
             for(int i = 0, len = ReadInt(stream); i < len; i++)
             {
-                ipAddresses[i] = ReadString(stream);
+                _ipAddresses[i] = ReadString(stream);
             }
         }
     }

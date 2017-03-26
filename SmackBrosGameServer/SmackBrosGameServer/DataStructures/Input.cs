@@ -7,14 +7,14 @@ namespace SmackBrosGameServer
 {
     public struct Input
     {
-        public int left;
-        public int right;
-        public int up;
-        public int down;
-        public int upC;
-        public int downC;
-        public int leftC;
-        public int rightC;
+        public int Left;
+        public int Right;
+        public int Up;
+        public int Down;
+        public int UpC;
+        public int DownC;
+        public int LeftC;
+        public int RightC;
         public int RightTrigger;
         public int LeftTrigger;
         public bool A;

@@ -9,7 +9,7 @@ namespace SmackBrosGameServer
     {
         public GameServerConnectPacket()
         {
-            typeID = 4;
+            TypeId = 4;
         }
         public override void ReadPacketData(System.IO.Stream stream)
         {

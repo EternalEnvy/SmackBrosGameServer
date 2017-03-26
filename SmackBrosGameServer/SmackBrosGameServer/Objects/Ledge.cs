@@ -7,16 +7,16 @@ namespace SmackBrosGameServer
 {
     public struct Ledge
     {
-        const int invicibilityTime = 150; //frames
-        bool hasPlayerActive;
-        bool isFacingRight;
-        public Vector2 myOrigin;
-        float radius;
-        public bool CollideLedge(Vector2 pos, bool FacingRight)
+        const int InvicibilityTime = 150; //frames
+        bool _hasPlayerActive;
+        bool _isFacingRight;
+        public Vector2 MyOrigin;
+        float _radius;
+        public bool CollideLedge(Vector2 pos, bool facingRight)
         {
-            if((pos - myOrigin).Length < radius && (isFacingRight == FacingRight))
+            if((pos - MyOrigin).Length < _radius && (_isFacingRight == facingRight))
             {
-                hasPlayerActive = true;
+                _hasPlayerActive = true;
                 return true;
             }
             return false;

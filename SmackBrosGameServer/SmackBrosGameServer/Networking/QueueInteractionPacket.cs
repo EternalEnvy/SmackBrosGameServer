@@ -8,27 +8,27 @@ namespace SmackBrosGameServer
 {
     class QueueInteractionPacket : Packet
     {
-        public string name;
-        public short mmr;
-        public string IPAddress;
-        public bool joining;
+        public string Name;
+        public short Mmr;
+        public string IpAddress;
+        public bool Joining;
         public QueueInteractionPacket()
         {
-            typeID = 1;
+            TypeId = 1;
         }
         public override void WritePacketData(List<byte> stream)
         {
-            WriteBool(stream, joining);
-            WriteStringBytes(stream, name);
-            WriteShort(stream, mmr);
-            WriteStringBytes(stream, IPAddress);
+            WriteBool(stream, Joining);
+            WriteStringBytes(stream, Name);
+            WriteShort(stream, Mmr);
+            WriteStringBytes(stream, IpAddress);
         }
         public override void ReadPacketData(Stream stream)
         {
-            joining = ReadBool(stream);
-            name = ReadString(stream);
-            mmr = ReadShort(stream);
-            IPAddress = ReadString(stream);
+            Joining = ReadBool(stream);
+            Name = ReadString(stream);
+            Mmr = ReadShort(stream);
+            IpAddress = ReadString(stream);
         }
     } 
 }

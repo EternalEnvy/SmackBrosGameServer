@@ -7,51 +7,51 @@ namespace SmackBrosGameServer
 {
     struct CollisionData
     {
-        int damage;
-        int priority;
-        Vector2 direction;
+        int _damage;
+        int _priority;
+        Vector2 _direction;
         public CollisionData(int dmg, int prio, Vector2 dir)
         {
-            damage = dmg;
-            priority = prio;
-            direction = dir;
+            _damage = dmg;
+            _priority = prio;
+            _direction = dir;
         }
         public int Priority
         {
             get
             {
-                return priority;
+                return _priority;
             }
         }
     }
     class Hitbox
     {
-        List<HitboxCollisionSphere> currentHitboxes = new List<HitboxCollisionSphere>();
-        List<HitboxCollisionSphere> lastFrameHitboxes = new List<HitboxCollisionSphere>();
+        List<HitboxCollisionSphere> _currentHitboxes = new List<HitboxCollisionSphere>();
+        List<HitboxCollisionSphere> _lastFrameHitboxes = new List<HitboxCollisionSphere>();
 
         public object Collision(Hurtbox hurtbox)
         {
             List<CollisionData> collisions = new List<CollisionData>();
-            foreach(HurtBoxData collisionBubble in hurtbox.hurtBoxes)
+            foreach(HurtBoxData collisionBubble in hurtbox.HurtBoxes)
             {
-                foreach(HitboxCollisionSphere hcs in currentHitboxes)
+                foreach(HitboxCollisionSphere hcs in _currentHitboxes)
                 {
-                    var d = Math.Round(Vector2.Distance(collisionBubble.position, hcs.centre));
-                    var e = Math.Round(collisionBubble.radius + hcs.radius);
+                    var d = Math.Round(Vector2.Distance(collisionBubble.Position, hcs.Centre));
+                    var e = Math.Round(collisionBubble.Radius + hcs.Radius);
                     if(Math.Abs(e - d) < 0.005)
                     {
                         //phantom hit
-                        collisions.Add(new CollisionData(hcs.priority, hcs.damage / 2, Vector2.Zero));
+                        collisions.Add(new CollisionData(hcs.Priority, hcs.Damage / 2, Vector2.Zero));
                     }
                     if(e < d)
                     {
-                        collisions.Add(new CollisionData(hcs.priority, hcs.damage, hcs.directionKnock));
+                        collisions.Add(new CollisionData(hcs.Priority, hcs.Damage, hcs.DirectionKnock));
                     }
                 }
-                for(int i = Math.Min(currentHitboxes.Count, lastFrameHitboxes.Count); i >= 0; i--)
+                for(int i = Math.Min(_currentHitboxes.Count, _lastFrameHitboxes.Count); i >= 0; i--)
                 {
-                    if (IntersectsRay(currentHitboxes[i].centre, lastFrameHitboxes[i].centre, collisionBubble.position, collisionBubble.radius))
-                        collisions.Add(new CollisionData(currentHitboxes[i].priority, currentHitboxes[i].damage, currentHitboxes[i].directionKnock));
+                    if (IntersectsRay(_currentHitboxes[i].Centre, _lastFrameHitboxes[i].Centre, collisionBubble.Position, collisionBubble.Radius))
+                        collisions.Add(new CollisionData(_currentHitboxes[i].Priority, _currentHitboxes[i].Damage, _currentHitboxes[i].DirectionKnock));
                 }
             }
             Sort_Merge(ref collisions, 0, collisions.Count);

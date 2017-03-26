@@ -10,7 +10,7 @@ namespace SmackBrosGameServer
     {
         protected bool Equals(Vector2 other)
         {
-            return x.Equals(other.x) && y.Equals(other.y);
+            return _x.Equals(other._x) && _y.Equals(other._y);
         }
 
         public override bool Equals(object obj)
@@ -25,21 +25,21 @@ namespace SmackBrosGameServer
         {
             unchecked
             {
-                return (x.GetHashCode()*397) ^ y.GetHashCode();
+                return (_x.GetHashCode()*397) ^ _y.GetHashCode();
             }
         }
 
-        private float x;
-        private float y;
+        private float _x;
+        private float _y;
         public float X
         {
-            get { return x; }
-            set { x = value; }
+            get { return _x; }
+            set { _x = value; }
         }
         public float Y
         {
-            get { return y; }
-            set { y = value; }
+            get { return _y; }
+            set { _y = value; }
         }
         public Vector2(float a, float b)
         {
@@ -62,21 +62,21 @@ namespace SmackBrosGameServer
                 return (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2)); 
             }
         }
-        public static float Distance(Vector2 A, Vector2 B)
+        public static float Distance(Vector2 a, Vector2 b)
         {
-            return (float)Math.Sqrt(Math.Pow(B.Y - A.Y, 2) + Math.Pow(B.X - A.X, 2));
+            return (float)Math.Sqrt(Math.Pow(b.Y - a.Y, 2) + Math.Pow(b.X - a.X, 2));
         }
-        public static float Dot(Vector2 A, Vector2 B)
+        public static float Dot(Vector2 a, Vector2 b)
         {
-            return A.X * B.X + A.Y * B.Y;
+            return a.X * b.X + a.Y * b.Y;
         }
-        public static Vector2 operator+(Vector2 A, Vector2 B)
+        public static Vector2 operator+(Vector2 a, Vector2 b)
         {
-            return new Vector2(A.X + B.X, A.Y + B.Y);
+            return new Vector2(a.X + b.X, a.Y + b.Y);
         }
-        public static Vector2 operator-(Vector2 A, Vector2 B)
+        public static Vector2 operator-(Vector2 a, Vector2 b)
         {
-            return new Vector2(A.X - B.X, A.Y - B.Y);
+            return new Vector2(a.X - b.X, a.Y - b.Y);
         }
         public static Vector2 operator-(Vector2 v)
         {
@@ -164,7 +164,7 @@ namespace SmackBrosGameServer
             }
             else
             {
-                throw new ArgumentException(THREE_COMPONENTS);
+                throw new ArgumentException(ThreeComponents);
             }
         }
 
@@ -174,7 +174,7 @@ namespace SmackBrosGameServer
             this.Y = v1.Y;
             this.Z = v1.Z;
         }
-        private const string THREE_COMPONENTS =
+        private const string ThreeComponents =
            "Array must contain exactly three components , (x,y,z)";
         public float Magnitude
         {
@@ -334,8 +334,8 @@ namespace SmackBrosGameServer
             }
             // Error condition: other is not a Vector3 object
             throw new ArgumentException(
-                NON_VECTOR_COMPARISON + "\n" +
-                ARGUMENT_TYPE + other.GetType(),
+                NonVectorComparison + "\n" +
+                ArgumentType + other.GetType(),
                 "other");
         }
         public static Vector3 operator *(Vector3 v1, float s2)
@@ -406,10 +406,10 @@ namespace SmackBrosGameServer
             return AlmostEqualsWithAbsTolerance(v1.Magnitude, 1, tolerance);
         }
 
-        private const string NON_VECTOR_COMPARISON =
+        private const string NonVectorComparison =
         "Cannot compare a Vector3 to a non-Vector3";
 
-        private const string ARGUMENT_TYPE =
+        private const string ArgumentType =
         "The argument provided is a type of ";
         public static Vector3 Normalize(Vector3 v1)
         {
@@ -471,10 +471,10 @@ namespace SmackBrosGameServer
                 v1.Z * inverse);
         }
 
-        private const string NORMALIZE_0 =
+        private const string Normalize0 =
             "Cannot normalize a vector when it's magnitude is zero";
 
-        private const string NORMALIZE_NaN =
+        private const string NormalizeNaN =
             "Cannot normalize a vector when it's magnitude is NaN";
         public static float Distance(Vector3 v1, Vector3 v2)
         {

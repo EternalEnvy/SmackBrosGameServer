@@ -11,27 +11,27 @@ namespace SmackBrosGameServer
         const int MaxStickExtension = 100;
         public void Update()
         {
-            if(serverInitialized && GameMetadata.FrameNumber >= 0)
+            if(ServerInitialized && _gameMetadata.FrameNumber >= 0)
             {
-                for (int i = 0; i < ClientInputBuffer.Count; i++)
+                for (int i = 0; i < _clientInputBuffer.Count; i++)
                 {
-                    if(ClientInputBuffer[i].FrameNumber <= GameMetadata.FrameNumber)
+                    if(_clientInputBuffer[i].FrameNumber <= _gameMetadata.FrameNumber)
                     {
-                        var item = ClientInputBuffer[i];
+                        var item = _clientInputBuffer[i];
                         UpdateFromClientGamepad(item);
-                        ClientInputBuffer.RemoveAt(i);
+                        _clientInputBuffer.RemoveAt(i);
                         i--;
                     }
                 }
             }
-            foreach(Smacker s in smackerList)
+            foreach(Smacker s in _smackerList)
             {
-                for(int i = 0; i < playerInputs.Count; i++)
+                for(int i = 0; i < _playerInputs.Count; i++)
                 {
-                    if (s.SmackerId == playerInputs[i].Item1)
+                    if (s.SmackerId == _playerInputs[i].Item1)
                     {
-                        HandleStateFromInput(s, playerInputs[i].Item2);
-                        playerInputs.RemoveAt(i);
+                        HandleStateFromInput(s, _playerInputs[i].Item2);
+                        _playerInputs.RemoveAt(i);
                     }
                 }
             }
@@ -46,13 +46,13 @@ namespace SmackBrosGameServer
                 return;
             }
             //ANALOG STICK INPUTS
-            if(input.up > 0)
+            if(input.Up > 0)
             {
-                if(input.up > MaxStickExtension * 2 / 3)
+                if(input.Up > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.up > MaxStickExtension / 3)
+                else if (input.Up > MaxStickExtension / 3)
                 {
 
                 }
@@ -61,13 +61,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if(input.down > 0)
+            else if(input.Down > 0)
             {
-                if(input.down > MaxStickExtension * 2 / 3)
+                if(input.Down > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.down > MaxStickExtension / 3)
+                else if (input.Down > MaxStickExtension / 3)
                 {
 
                 }
@@ -76,13 +76,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if(input.right > 0)
+            else if(input.Right > 0)
             {
-                if(input.right > MaxStickExtension * 2 / 3)
+                if(input.Right > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.right > MaxStickExtension / 3)
+                else if (input.Right > MaxStickExtension / 3)
                 {
 
                 }
@@ -91,13 +91,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if(input.left > 0)
+            else if(input.Left > 0)
             {
-                if(input.left > MaxStickExtension * 2 / 3)
+                if(input.Left > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.left > MaxStickExtension / 3)
+                else if (input.Left > MaxStickExtension / 3)
                 {
 
                 }
@@ -108,13 +108,13 @@ namespace SmackBrosGameServer
             }
 
             //C-STICK INPUTS
-            if(input.upC > 0)
+            if(input.UpC > 0)
             {
-                if(input.upC > MaxStickExtension * 2 / 3)
+                if(input.UpC > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.upC > MaxStickExtension / 3)
+                else if (input.UpC > MaxStickExtension / 3)
                 {
 
                 }
@@ -123,13 +123,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if (input.downC > 0)
+            else if (input.DownC > 0)
             {
-                if(input.downC > MaxStickExtension * 2 / 3)
+                if(input.DownC > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.downC > MaxStickExtension / 3)
+                else if (input.DownC > MaxStickExtension / 3)
                 {
 
                 }
@@ -138,13 +138,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if (input.rightC > 0)
+            else if (input.RightC > 0)
             {
-                if(input.rightC > MaxStickExtension * 2 / 3)
+                if(input.RightC > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.rightC > MaxStickExtension / 3)
+                else if (input.RightC > MaxStickExtension / 3)
                 {
 
                 }
@@ -153,13 +153,13 @@ namespace SmackBrosGameServer
 
                 }
             }
-            else if (input.leftC > 0)
+            else if (input.LeftC > 0)
             {
-                if(input.leftC > MaxStickExtension * 2 / 3)
+                if(input.LeftC > MaxStickExtension * 2 / 3)
                 {
 
                 }
-                else if (input.leftC > MaxStickExtension / 3)
+                else if (input.LeftC > MaxStickExtension / 3)
                 {
 
                 }

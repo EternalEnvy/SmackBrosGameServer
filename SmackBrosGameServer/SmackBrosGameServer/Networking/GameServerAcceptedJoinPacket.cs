@@ -9,20 +9,20 @@ namespace SmackBrosGameServer
     class GameServerAcceptedJoinPacket:Packet
     {
         public bool Accepted;
-        public string ipToSend = "";
+        public string IpToSend = "";
         public GameServerAcceptedJoinPacket()
         {
-            typeID = 5;
+            TypeId = 5;
         }
         public override void ReadPacketData(Stream stream)
         {
             Accepted = stream.ReadByte() == 1;
-            ipToSend = ReadString(stream);
+            IpToSend = ReadString(stream);
         }
         public override void WritePacketData(List<byte> stream)
         {
             WriteBool(stream, Accepted);
-            WriteStringBytes(stream, ipToSend);
+            WriteStringBytes(stream, IpToSend);
         }
     }
 }

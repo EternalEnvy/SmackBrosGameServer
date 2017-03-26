@@ -7,11 +7,11 @@ namespace SmackBrosGameServer
 {
     public class GameTime
     {
-        private TimeSpan internalTime;
+        private TimeSpan _internalTime;
         public TimeSpan ElapsedGameTime
         {
-            get { return internalTime; }
-            set { internalTime = value; }
+            get { return _internalTime; }
+            set { _internalTime = value; }
         }
         public bool operator>(GameTime g1, GameTime g2)
         {

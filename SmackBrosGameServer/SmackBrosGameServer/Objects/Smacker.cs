@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SmackBrosGameServer
 {
-    public class Smacker
+    public class Smacker : IGameObject
     {
         const float HitlagMultiplier = 0.4f;
         protected Vector2 Pos;
@@ -15,8 +15,8 @@ namespace SmackBrosGameServer
         private DamageData _damageData;
         private SpecialMoveData _specialData;
 
-        private int maxJumps;
-        private int curJumps;
+        private int _maxJumps;
+        private int _curJumps;
 
         public SmackerState State;
         public short SmackerId;
@@ -110,7 +110,7 @@ namespace SmackBrosGameServer
         }
         public void StartJump()
         {
-            if(curJumps > 0)
+            if(_curJumps > 0)
             {
                 if(IsGrounded)
                 {
@@ -135,7 +135,7 @@ namespace SmackBrosGameServer
         {
             //remove hitboxes that are from the current player, condense the list for simplification
             var hb = hitboxes.Where(x => x.Item1 != SmackerId).Select(y => y.Item2).ToList();
-            Velocity.Y += _frameData.gravityForce;
+            Velocity.Y += _frameData.GravityForce;
             Pos += Velocity;
         }
         private void DealDamage(int damage)
@@ -143,15 +143,15 @@ namespace SmackBrosGameServer
             HitstunDuration += HitlagMultiplier * damage;
             Damage += damage;
         }
-        public void UpdateFromInput(Input input, GameData GameMetadata)
+        public void UpdateFromInput(Input input, GameData gameMetadata)
         {
             if (input.Start)
             {
                 //pause the game
-                if (GameMetadata.pauseAlpha > 100)
+                if (gameMetadata.PauseAlpha > 100)
                 {
-                    GameMetadata.GamePaused = !GameMetadata.GamePaused;
-                    GameMetadata.pauseAlpha = 0;
+                    gameMetadata.GamePaused = !gameMetadata.GamePaused;
+                    gameMetadata.PauseAlpha = 0;
                 }
             }
             FrameDurationCurState++;
@@ -173,7 +173,7 @@ namespace SmackBrosGameServer
                 {
                     if(State == SmackerState.JumpSquat)
                     {
-                        if(input.up == 0 && !input.X && !input.Y)
+                        if(input.Up == 0 && !input.X && !input.Y)
                         {
                             //shorthop
                             
@@ -209,9 +209,14 @@ namespace SmackBrosGameServer
             }
             return null;
         }
- 
+
+
+        public double IntersectsRay(Vector2 origin, Vector2 direction)
+        {
+            
+        }
     }
-    enum SmackerState
+    public enum SmackerState
     {
         DeadDown,//0
         DeadRight,

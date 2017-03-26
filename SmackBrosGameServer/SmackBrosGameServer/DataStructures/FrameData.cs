@@ -26,7 +26,7 @@ namespace SmackBrosGameServer
         public float RunSpeed;
         public float DashSpeed;
 
-        public float gravityForce;
+        public float GravityForce;
 
         public short JumpCrouchDuration;
         public short JabDuration;
@@ -55,54 +55,54 @@ namespace SmackBrosGameServer
 
         public struct FrameDataCircle
         {
-            Vector2 position;
-            Vector2 characterMovement;
-            float radius;
-            bool modifier; 
+            Vector2 _position;
+            Vector2 _characterMovement;
+            float _radius;
+            bool _modifier; 
             public FrameDataCircle(Vector2 position, Vector2 characterMovement, float radius, bool modifier)
             {
-                this.position = position;
-                this.characterMovement = characterMovement;
-                this.radius = radius;
-                this.modifier = modifier;
+                this._position = position;
+                this._characterMovement = characterMovement;
+                this._radius = radius;
+                this._modifier = modifier;
             }
         }
         //Position relative to char, movement, radius, Special Modifier (use based on context)
-        public List<FrameDataCircle>[] walkFrames;
-        public List<FrameDataCircle>[] runFrames;
-        public List<FrameDataCircle>[] dashFrames;
-        public List<FrameDataCircle>[] jumpFrames;
-        public List<FrameDataCircle>[] airJumpForwardFrames;
-        public List<FrameDataCircle>[] airJumpBackWardFrames;
-        public List<FrameDataCircle>[] jabFrames;
-        public List<FrameDataCircle>[] jabComboFrames;
-        public List<FrameDataCircle>[] fTiltFrames;
-        public List<FrameDataCircle>[] uTiltFrames;
-        public List<FrameDataCircle>[] dTiltFrames;
-        public List<FrameDataCircle>[] dashAttackFrames;
-        public List<FrameDataCircle>[] uSmashFrames;
-        public List<FrameDataCircle>[] fSmashFrames;
-        public List<FrameDataCircle>[] dSmashFrames;
-        public List<FrameDataCircle>[] fairFrames;
-        public List<FrameDataCircle>[] uairFrames;
-        public List<FrameDataCircle>[] dairFrames;
-        public List<FrameDataCircle>[] bairFrames;
-        public List<FrameDataCircle>[] nairFrames;
-        public List<FrameDataCircle>[] grabFrames;
-        public List<FrameDataCircle>[] dashGrabFrames;
-        public List<FrameDataCircle>[] airDodgeFrames;
-        public List<FrameDataCircle>[] spotDodgeFrames;
-        public List<FrameDataCircle>[] rollForwardFrames;
-        public List<FrameDataCircle>[] rollBackwardFrames;
-        public List<FrameDataCircle>[] techInPlaceFrames;
-        public List<FrameDataCircle>[] techForwardFrames;
-        public List<FrameDataCircle>[] techBackFrames;
-        public List<FrameDataCircle>[] techMissFrames;
-        public List<FrameDataCircle>[] getUpDownFrames;
-        public List<FrameDataCircle>[] getUpUpFrames;
-        public List<FrameDataCircle>[] toCrouchFrames;
-        public List<FrameDataCircle>[] toShieldFrames;
-        public List<FrameDataCircle>[] aerialEndLagFrames;
+        public List<FrameDataCircle>[] WalkFrames;
+        public List<FrameDataCircle>[] RunFrames;
+        public List<FrameDataCircle>[] DashFrames;
+        public List<FrameDataCircle>[] JumpFrames;
+        public List<FrameDataCircle>[] AirJumpForwardFrames;
+        public List<FrameDataCircle>[] AirJumpBackWardFrames;
+        public List<FrameDataCircle>[] JabFrames;
+        public List<FrameDataCircle>[] JabComboFrames;
+        public List<FrameDataCircle>[] FTiltFrames;
+        public List<FrameDataCircle>[] UTiltFrames;
+        public List<FrameDataCircle>[] DTiltFrames;
+        public List<FrameDataCircle>[] DashAttackFrames;
+        public List<FrameDataCircle>[] USmashFrames;
+        public List<FrameDataCircle>[] FSmashFrames;
+        public List<FrameDataCircle>[] DSmashFrames;
+        public List<FrameDataCircle>[] FairFrames;
+        public List<FrameDataCircle>[] UairFrames;
+        public List<FrameDataCircle>[] DairFrames;
+        public List<FrameDataCircle>[] BairFrames;
+        public List<FrameDataCircle>[] NairFrames;
+        public List<FrameDataCircle>[] GrabFrames;
+        public List<FrameDataCircle>[] DashGrabFrames;
+        public List<FrameDataCircle>[] AirDodgeFrames;
+        public List<FrameDataCircle>[] SpotDodgeFrames;
+        public List<FrameDataCircle>[] RollForwardFrames;
+        public List<FrameDataCircle>[] RollBackwardFrames;
+        public List<FrameDataCircle>[] TechInPlaceFrames;
+        public List<FrameDataCircle>[] TechForwardFrames;
+        public List<FrameDataCircle>[] TechBackFrames;
+        public List<FrameDataCircle>[] TechMissFrames;
+        public List<FrameDataCircle>[] GetUpDownFrames;
+        public List<FrameDataCircle>[] GetUpUpFrames;
+        public List<FrameDataCircle>[] ToCrouchFrames;
+        public List<FrameDataCircle>[] ToShieldFrames;
+        public List<FrameDataCircle>[] AerialEndLagFrames;
 
         public bool LoadData(string path)
         {
@@ -132,44 +132,44 @@ namespace SmackBrosGameServer
                         RunSpeed = AddFloatData(reader);
                         DashSpeed = AddFloatData(reader);
 
-                        gravityForce = AddFloatData(reader);
+                        GravityForce = AddFloatData(reader);
 
                         //THE FRAME DATA
-                        walkFrames = AddFrameData(reader);
-                        runFrames = AddFrameData(reader);
-                        dashFrames = AddFrameData(reader);
-                        jumpFrames = AddFrameData(reader);
-                        airJumpForwardFrames = AddFrameData(reader);
-                        airJumpBackWardFrames = AddFrameData(reader);
-                        jabFrames = AddFrameData(reader);
-                        jabComboFrames = AddFrameData(reader);
-                        dashAttackFrames = AddFrameData(reader);
-                        fTiltFrames = AddFrameData(reader);
-                        uTiltFrames = AddFrameData(reader);
-                        dTiltFrames = AddFrameData(reader);
-                        fSmashFrames = AddFrameData(reader);
-                        uSmashFrames = AddFrameData(reader);
-                        dSmashFrames = AddFrameData(reader);
-                        fairFrames = AddFrameData(reader);
-                        uairFrames = AddFrameData(reader);
-                        dairFrames = AddFrameData(reader);
-                        bairFrames = AddFrameData(reader);
-                        nairFrames = AddFrameData(reader);
-                        grabFrames = AddFrameData(reader);
-                        dashGrabFrames = AddFrameData(reader);
-                        airDodgeFrames = AddFrameData(reader);
-                        spotDodgeFrames = AddFrameData(reader);
-                        rollForwardFrames = AddFrameData(reader);
-                        rollBackwardFrames = AddFrameData(reader);
-                        techInPlaceFrames = AddFrameData(reader);
-                        techForwardFrames = AddFrameData(reader);
-                        techBackFrames = AddFrameData(reader);
-                        techMissFrames = AddFrameData(reader);
-                        getUpUpFrames = AddFrameData(reader);
-                        getUpDownFrames = AddFrameData(reader);
-                        toCrouchFrames = AddFrameData(reader);
-                        toShieldFrames = AddFrameData(reader);
-                        aerialEndLagFrames = AddFrameData(reader);
+                        WalkFrames = AddFrameData(reader);
+                        RunFrames = AddFrameData(reader);
+                        DashFrames = AddFrameData(reader);
+                        JumpFrames = AddFrameData(reader);
+                        AirJumpForwardFrames = AddFrameData(reader);
+                        AirJumpBackWardFrames = AddFrameData(reader);
+                        JabFrames = AddFrameData(reader);
+                        JabComboFrames = AddFrameData(reader);
+                        DashAttackFrames = AddFrameData(reader);
+                        FTiltFrames = AddFrameData(reader);
+                        UTiltFrames = AddFrameData(reader);
+                        DTiltFrames = AddFrameData(reader);
+                        FSmashFrames = AddFrameData(reader);
+                        USmashFrames = AddFrameData(reader);
+                        DSmashFrames = AddFrameData(reader);
+                        FairFrames = AddFrameData(reader);
+                        UairFrames = AddFrameData(reader);
+                        DairFrames = AddFrameData(reader);
+                        BairFrames = AddFrameData(reader);
+                        NairFrames = AddFrameData(reader);
+                        GrabFrames = AddFrameData(reader);
+                        DashGrabFrames = AddFrameData(reader);
+                        AirDodgeFrames = AddFrameData(reader);
+                        SpotDodgeFrames = AddFrameData(reader);
+                        RollForwardFrames = AddFrameData(reader);
+                        RollBackwardFrames = AddFrameData(reader);
+                        TechInPlaceFrames = AddFrameData(reader);
+                        TechForwardFrames = AddFrameData(reader);
+                        TechBackFrames = AddFrameData(reader);
+                        TechMissFrames = AddFrameData(reader);
+                        GetUpUpFrames = AddFrameData(reader);
+                        GetUpDownFrames = AddFrameData(reader);
+                        ToCrouchFrames = AddFrameData(reader);
+                        ToShieldFrames = AddFrameData(reader);
+                        AerialEndLagFrames = AddFrameData(reader);
                     }
                     return true;
                 }
@@ -207,14 +207,14 @@ namespace SmackBrosGameServer
             }
             int numFrames = Convert.ToInt32(line);
             int numHitboxes;
-            var Frames = new List<FrameDataCircle>[numFrames];
+            var frames = new List<FrameDataCircle>[numFrames];
             for (int i = 0; i < numFrames; i++)
             {
                 numHitboxes = Convert.ToInt32(reader.ReadLine());
                 for (int j = 0; j < numHitboxes; j++)
                 {
                     string[] data = reader.ReadLine().Split(' ');
-                    Frames[i].Add(
+                    frames[i].Add(
                         new FrameDataCircle(
                             new Vector2(Convert.ToSingle(data[0]), Convert.ToSingle(data[1])),
                             new Vector2(Convert.ToSingle(data[2]), Convert.ToSingle(data[3])),
@@ -223,7 +223,7 @@ namespace SmackBrosGameServer
 
                 }
             }
-            return Frames;
+            return frames;
         }
     }
 }

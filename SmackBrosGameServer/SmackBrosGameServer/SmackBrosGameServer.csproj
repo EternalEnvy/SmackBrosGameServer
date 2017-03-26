@@ -57,6 +57,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Device" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -79,9 +80,12 @@
     <Compile Include="DataStructures\GameData.cs" />
     <Compile Include="DataStructures\Hurtbox.cs" />
     <Compile Include="DataStructures\PickledSmackerData.cs" />
+    <Compile Include="GameServer.cs" />
     <Compile Include="Networking\GameServerAcceptedJoinPacket.cs" />
     <Compile Include="Networking\GameServerConnectPacket.cs" />
     <Compile Include="Networking\GameStatePacket.cs" />
+    <Compile Include="Objects\GameObject.cs" />
+    <Compile Include="Objects\GameObjectRegister.cs" />
     <Compile Include="Utility\GameTime.cs" />
     <Compile Include="Objects\Ground.cs" />
     <Compile Include="DataStructures\Input.cs" />
@@ -101,20 +105,12 @@
     <Compile Include="UpdateLogic.cs" />
     <Compile Include="Utility\Vector.cs" />
     <Compile Include="Utility\Rectangle.cs" />
-    <Page Include="GameServerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataStructures\Hitbox.cs" />
     <Compile Include="DataStructures\HitboxCollisionSphere.cs" />
-    <Compile Include="GameServerWindow.xaml.cs">
-      <DependentUpon>GameServerWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

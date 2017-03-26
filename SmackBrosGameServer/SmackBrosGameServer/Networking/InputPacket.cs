@@ -10,7 +10,7 @@ namespace SmackBrosGameServer
     class InputPacket : Packet
     {
         public long FrameNumber;
-        public int playerNum;
+        public int PlayerNum;
         public int Up;
         public int Left;
         public int Down;
@@ -31,7 +31,7 @@ namespace SmackBrosGameServer
 
         public InputPacket()
         {
-            typeID = 8;
+            TypeId = 8;
         }
         public override void WritePacketData(List<byte> stream)
         {

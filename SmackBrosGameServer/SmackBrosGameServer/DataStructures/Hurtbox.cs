@@ -5,14 +5,14 @@ using System.Text;
 
 namespace SmackBrosGameServer{
 
-    struct HurtBoxData
+    public struct HurtBoxData
     {
-        public Vector2 position;
-        public float radius;
-        public bool invincible;
+        public Vector2 Position;
+        public float Radius;
+        public bool Invincible;
     }
-    class Hurtbox
+    public class Hurtbox
     {
-        public List<HurtBoxData> hurtBoxes = new List<HurtBoxData>();
+        public List<HurtBoxData> HurtBoxes = new List<HurtBoxData>();
     }
 }

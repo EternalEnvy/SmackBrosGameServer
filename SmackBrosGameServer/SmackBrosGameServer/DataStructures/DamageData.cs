@@ -26,70 +26,70 @@ namespace SmackBrosGameServer
     public struct DamageData
     {
         //postion relative to character, launch direction, power, radius, damage 
-        public List<DamageCircleFrame>[] jabDamageFrames;
-        public List<DamageCircleFrame>[] jabComboDamageFrames;
-        public List<DamageCircleFrame>[] dashAttackDamageFrames;
-        public List<DamageCircleFrame>[] fSmashDamageFrames;
-        public List<DamageCircleFrame>[] uSmashDamageFrames;
-        public List<DamageCircleFrame>[] dSmashDamageFrames;
-        public List<DamageCircleFrame>[] fTiltDamageFrames;
-        public List<DamageCircleFrame>[] uTiltDamageFrames;
-        public List<DamageCircleFrame>[] dTiltDamageFrames;
-        public List<DamageCircleFrame>[] upGetUpDamageFrames;
-        public List<DamageCircleFrame>[] downGetUpDamageFrames;
-        public List<DamageCircleFrame>[] fAirDamageFrames;
-        public List<DamageCircleFrame>[] dAirDamageFrames;
-        public List<DamageCircleFrame>[] bAirDamageFrames;
-        public List<DamageCircleFrame>[] uAirDamageFrames;
-        public List<DamageCircleFrame>[] nAirDamageFrames;
-        public List<DamageCircleFrame>[] fThrowDamageFrames;
-        public List<DamageCircleFrame>[] dThrowDamageFrames;
-        public List<DamageCircleFrame>[] bThrowDamageFrames;
-        public List<DamageCircleFrame>[] uThrowDamageFrames;
-        public List<DamageCircleFrame>[] grabPummelDamageFrames;
+        public List<DamageCircleFrame>[] JabDamageFrames;
+        public List<DamageCircleFrame>[] JabComboDamageFrames;
+        public List<DamageCircleFrame>[] DashAttackDamageFrames;
+        public List<DamageCircleFrame>[] FSmashDamageFrames;
+        public List<DamageCircleFrame>[] USmashDamageFrames;
+        public List<DamageCircleFrame>[] DSmashDamageFrames;
+        public List<DamageCircleFrame>[] FTiltDamageFrames;
+        public List<DamageCircleFrame>[] UTiltDamageFrames;
+        public List<DamageCircleFrame>[] DTiltDamageFrames;
+        public List<DamageCircleFrame>[] UpGetUpDamageFrames;
+        public List<DamageCircleFrame>[] DownGetUpDamageFrames;
+        public List<DamageCircleFrame>[] FAirDamageFrames;
+        public List<DamageCircleFrame>[] DAirDamageFrames;
+        public List<DamageCircleFrame>[] BAirDamageFrames;
+        public List<DamageCircleFrame>[] UAirDamageFrames;
+        public List<DamageCircleFrame>[] NAirDamageFrames;
+        public List<DamageCircleFrame>[] FThrowDamageFrames;
+        public List<DamageCircleFrame>[] DThrowDamageFrames;
+        public List<DamageCircleFrame>[] BThrowDamageFrames;
+        public List<DamageCircleFrame>[] UThrowDamageFrames;
+        public List<DamageCircleFrame>[] GrabPummelDamageFrames;
 
         public List<DamageCircleFrame>[] StateNumToDamageData(int enumeratedState)
         {
             switch(enumeratedState)
             {
                 case 36:
-                    return jabDamageFrames;
+                    return JabDamageFrames;
                 case 39:
-                    return jabComboDamageFrames;
+                    return JabComboDamageFrames;
                 case 42:
-                    return dashAttackDamageFrames;
+                    return DashAttackDamageFrames;
                 case 43:
-                    return uTiltDamageFrames;
+                    return UTiltDamageFrames;
                 case 44:
-                    return dTiltDamageFrames;
+                    return DTiltDamageFrames;
                 case 45:
-                    return fTiltDamageFrames;
+                    return FTiltDamageFrames;
                 case 46:
-                    return fSmashDamageFrames;
+                    return FSmashDamageFrames;
                 case 47:
-                    return dSmashDamageFrames;
+                    return DSmashDamageFrames;
                 case 48:
-                    return uSmashDamageFrames;
+                    return USmashDamageFrames;
                 case 49:
-                    return nAirDamageFrames;
+                    return NAirDamageFrames;
                 case 50:
-                    return uAirDamageFrames;
+                    return UAirDamageFrames;
                 case 51:
-                    return fAirDamageFrames;
+                    return FAirDamageFrames;
                 case 52:
-                    return bAirDamageFrames;
+                    return BAirDamageFrames;
                 case 53:
-                    return dAirDamageFrames;
+                    return DAirDamageFrames;
                 case 83:
-                    return grabPummelDamageFrames;
+                    return GrabPummelDamageFrames;
                 case 85:
-                    return uThrowDamageFrames;
+                    return UThrowDamageFrames;
                 case 86:
-                    return dThrowDamageFrames;
+                    return DThrowDamageFrames;
                 case 87:
-                    return fThrowDamageFrames;
+                    return FThrowDamageFrames;
                 case 88:
-                    return uThrowDamageFrames;
+                    return UThrowDamageFrames;
                 default:
                     return null;
             }
@@ -108,43 +108,43 @@ namespace SmackBrosGameServer
                     using (StreamReader reader = new StreamReader(path))
                     {
                         //Jab
-                        jabDamageFrames = AddHitboxes(reader);
+                        JabDamageFrames = AddHitboxes(reader);
                         //Jab Combo
-                        jabComboDamageFrames = AddHitboxes(reader);
+                        JabComboDamageFrames = AddHitboxes(reader);
                         //Dash Attack
-                        dashAttackDamageFrames = AddHitboxes(reader);
+                        DashAttackDamageFrames = AddHitboxes(reader);
                         //Forward Smash
-                        fSmashDamageFrames = AddHitboxes(reader);
+                        FSmashDamageFrames = AddHitboxes(reader);
                         //Up Smash
-                        uSmashDamageFrames = AddHitboxes(reader);
+                        USmashDamageFrames = AddHitboxes(reader);
                         //Down Smash
-                        dSmashDamageFrames = AddHitboxes(reader);
+                        DSmashDamageFrames = AddHitboxes(reader);
                         //Foward Tilt
-                        fTiltDamageFrames = AddHitboxes(reader); 
+                        FTiltDamageFrames = AddHitboxes(reader); 
                         //Up Tilt
-                        uTiltDamageFrames = AddHitboxes(reader);
+                        UTiltDamageFrames = AddHitboxes(reader);
                         //Down Tilt
-                        dTiltDamageFrames = AddHitboxes(reader);
+                        DTiltDamageFrames = AddHitboxes(reader);
                         //Up Getup
-                        upGetUpDamageFrames = AddHitboxes(reader);
+                        UpGetUpDamageFrames = AddHitboxes(reader);
                         //Down getup
-                        downGetUpDamageFrames = AddHitboxes(reader);
+                        DownGetUpDamageFrames = AddHitboxes(reader);
                         //Fair
-                        fAirDamageFrames = AddHitboxes(reader); 
+                        FAirDamageFrames = AddHitboxes(reader); 
                         //Uair
-                        uAirDamageFrames = AddHitboxes(reader);
+                        UAirDamageFrames = AddHitboxes(reader);
                         //Dair
-                        dAirDamageFrames = AddHitboxes(reader);
+                        DAirDamageFrames = AddHitboxes(reader);
                         //Bair
-                        bAirDamageFrames = AddHitboxes(reader);
+                        BAirDamageFrames = AddHitboxes(reader);
                         //FThrow
-                        fThrowDamageFrames = AddHitboxes(reader); 
+                        FThrowDamageFrames = AddHitboxes(reader); 
                         //UThrow
-                        uThrowDamageFrames = AddHitboxes(reader);
+                        UThrowDamageFrames = AddHitboxes(reader);
                         //DThrow
-                        dThrowDamageFrames = AddHitboxes(reader);
+                        DThrowDamageFrames = AddHitboxes(reader);
                         //BThrow
-                        bThrowDamageFrames = AddHitboxes(reader); 
+                        BThrowDamageFrames = AddHitboxes(reader); 
                     }
                     return true;
                 }

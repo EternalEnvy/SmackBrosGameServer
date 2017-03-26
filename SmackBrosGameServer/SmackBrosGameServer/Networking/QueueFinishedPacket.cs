@@ -8,7 +8,7 @@ namespace SmackBrosGameServer
 {
     class QueueFinishedPacket : Packet
     {
-        public string ipAddressToConnectTo;
+        public string IpAddressToConnectTo;
         public short NumPlayers;
         public bool[] PlayersAccepted;
         public override void WritePacketData(List<byte> stream)
@@ -19,7 +19,7 @@ namespace SmackBrosGameServer
             {
                 mask = (byte)(mask | (PlayersAccepted[i] ? 1 << i : 0));
             }
-            WriteStringBytes(stream, ipAddressToConnectTo);
+            WriteStringBytes(stream, IpAddressToConnectTo);
         }
         public override void ReadPacketData(Stream stream)
         {
@@ -30,7 +30,7 @@ namespace SmackBrosGameServer
             {
                 PlayersAccepted[k] = ((b >> k) & 1) == 1;
             }
-            ipAddressToConnectTo = ReadString(stream);
+            IpAddressToConnectTo = ReadString(stream);
         }
     }
 }

@@ -7,32 +7,32 @@ namespace SmackBrosGameServer
 {
     struct Rectangle
     {
-        Vector2 topR;
-        Vector2 topL;
-        Vector2 botL;
-        Vector2 botR;
-        bool canTech;
+        Vector2 _topR;
+        Vector2 _topL;
+        Vector2 _botL;
+        Vector2 _botR;
+        bool _canTech;
         public bool Intersects(Vector2 pos)
         {
-            if(pos.X < topR.X && pos.X > topL.X && pos.Y < botL.Y && pos.Y > botR.Y)
+            if(pos.X < _topR.X && pos.X > _topL.X && pos.Y < _botL.Y && pos.Y > _botR.Y)
                 return true;
             else return false;
         }
-        public Vector2 TOPR
+        public Vector2 Topr
         {
-            get { return topR; }
+            get { return _topR; }
         }
-        public Vector2 TOPL
+        public Vector2 Topl
         {
-            get { return topL; }
+            get { return _topL; }
         }
-        public Vector2 BOTR
+        public Vector2 Botr
         {
-            get { return botR; }
+            get { return _botR; }
         }
-        public Vector2 BOTL
+        public Vector2 Botl
         {
-            get { return botL; }
+            get { return _botL; }
         }
     }
 }
